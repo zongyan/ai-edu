@@ -15,20 +15,19 @@ def derivative_function(theta):
     return np.array([2*x,2*np.sin(y)*np.cos(y)])
 
 def show_3d_surface(x, y, z):
-    # the following two are used to generate the 3d-plot axis
     fig = plt.figure()
     ax = Axes3D(fig)
  
     u = np.linspace(-3, 3, 100)
     v = np.linspace(-3, 3, 100)
-    X, Y = np.meshgrid(u, v) # genearte the mesh grid (x and y axises)
+    X, Y = np.meshgrid(u, v)
     R = np.zeros((len(u), len(v)))
     for i in range(len(u)):
         for j in range(len(v)):
-            R[i, j] = X[i, j]**2 + np.sin(Y[i, j])**2 # calculate the z-axis value
+            R[i, j] = X[i, j]**2 + np.sin(Y[i, j])**2
 
-    ax.plot_surface(X, Y, R, cmap='rainbow') # plot the 3d surface version
-    plt.plot(x,y,z,c='black') # plot the 3d figure
+    ax.plot_surface(X, Y, R, cmap='rainbow')
+    plt.plot(x,y,z,c='black')
     plt.show()
 
 if __name__ == '__main__':
