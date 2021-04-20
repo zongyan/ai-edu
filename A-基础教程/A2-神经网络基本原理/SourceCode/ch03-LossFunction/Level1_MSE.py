@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.colors import LogNorm
 
-file_name = "../../data/ch03.npz"
+file_name = "../../SourceCode/ch03.npz"
 
 def TargetFunction(x,w,b):
     y = w*x + b
@@ -46,7 +46,7 @@ def CalculateCostB(x,y,n,w,b):
         z = w*x+B[i]
         loss = CostFunction(x,y,z,n)
         Loss.append(loss)
-    plt.title("Loss according to b")
+    # plt.title("Loss according to b")
     plt.xlabel("b")
     plt.ylabel("J")
     plt.plot(B,Loss,'x')
@@ -60,7 +60,7 @@ def CalculateCostW(x,y,n,w,b):
         z = W[i]*x+b
         loss = CostFunction(x,y,z,n)
         Loss.append(loss)
-    plt.title("Loss according to w")
+    # plt.title("Loss according to w")
     plt.xlabel("w")
     plt.ylabel("J")
     plt.title = "Loss according to w"
