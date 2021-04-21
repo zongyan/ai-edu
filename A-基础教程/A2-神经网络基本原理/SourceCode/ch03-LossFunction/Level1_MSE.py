@@ -218,7 +218,7 @@ if __name__ == '__main__':
     CalculateCostB(x,y,m,w,b)
     CalculateCostW(x,y,m,w,b)
     
-    #CalculateCostWB(x,y,n)
+    CalculateCostWB(x,y,m,w,b)
 
     show_3d_surface(x,y,m,w,b)
     
