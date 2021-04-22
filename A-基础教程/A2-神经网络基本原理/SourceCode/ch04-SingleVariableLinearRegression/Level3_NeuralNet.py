@@ -8,13 +8,15 @@ import matplotlib.pyplot as plt
 
 from HelperClass.DataReader_1_0 import *
 
-file_name = "../../data/ch04.npz"
+file_name = "../../SourceCode/Data/ch04.npz"
 
 class NeuralNet_0_1(object):
     def __init__(self, eta):
         self.eta = eta
         self.w = 0
         self.b = 0
+        self.db = 0
+        self.dw = 0
 
     def __forward(self, x):
         z = x * self.w + self.b
@@ -22,13 +24,12 @@ class NeuralNet_0_1(object):
 
     def __backward(self, x,y,z):
         dz = z - y
-        db = dz
-        dw = x * dz
-        return dw, db
+        self.db = dz
+        self.dw = x * dz
 
     def __update(self, dw, db):
-        self.w = self.w - self.eta * dw
-        self.b = self.b - self.eta * db
+        self.w = self.w - self.eta * self.dw
+        self.b = self.b - self.eta * self.db
 
     def train(self, dataReader):
         for i in range(dataReader.num_train):
@@ -37,9 +38,9 @@ class NeuralNet_0_1(object):
             # get z from x,y
             z = self.__forward(x)
             # calculate gradient of w and b
-            dw, db = self.__backward(x, y, z)
+            self.__backward(x, y, z)
             # update w,b
-            self.__update(dw, db)
+            self.__update(self.dw, self.db)
         # end for
 
     def inference(self, x):
