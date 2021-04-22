@@ -9,7 +9,19 @@ from pathlib import Path
 
 from HelperClass.DataReader_1_0 import *
 
-file_name = "../../data/ch04.npz"
+file_name = "../../SourceCode/Data/ch04.npz"
+
+"""
+Yan_X=[1, 2, 3, 4, 5, 6]
+Yan_Y=Yan_X
+
+x_array = np.array(Yan_X)
+y_array = np.array(Yan_Y)
+
+print(x_array * y_array) --> [ 1  4  9 16 25 36]; this is DIFFERENT from matlab
+print(x_array.shape[0]) --> 6
+print(sum(x_array)) -> 21
+"""
 
 # 根据公式15
 def method1(X,Y,m):
