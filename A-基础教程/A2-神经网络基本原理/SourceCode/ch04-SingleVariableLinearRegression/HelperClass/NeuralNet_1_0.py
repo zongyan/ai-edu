@@ -24,8 +24,12 @@ class NeuralNet_1_0(object):
         return Z
 
     def __backwardBatch(self, batch_x, batch_y, batch_z):
-        m = batch_x.shape[0]
+        m = batch_x.shape[0] # determine the dimension of the array
         dZ = batch_z - batch_y
+        """
+        checking the following link (https://stackoverflow.com/questions/39441517/in-numpy-sum-there-is-parameter-called-keepdims-what-does-it-do)
+        for more details about sum(axis, keepdims)
+        """
         dB = dZ.sum(axis=0, keepdims=True)/m
         dW = np.dot(batch_x.T, dZ)/m
         return dW, dB
