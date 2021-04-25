@@ -7,7 +7,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from HelperClass.NeuralNet_1_1 import *
 
-file_name = "../../data/ch05.npz"
+file_name = "../../SourceCode/Data/ch05.npz"
 
 def ShowResult(net, reader):
     # draw example points
@@ -16,8 +16,8 @@ def ShowResult(net, reader):
     ax = Axes3D(fig)
     ax.scatter(X[:,0],X[:,1],Y)
     # draw fitting surface
-    p = np.linspace(0,1)
-    q = np.linspace(0,1)
+    p = np.linspace(0,1) # by default, num is equal to 50
+    q = np.linspace(0,1) # by default, num is equal to 50
     P,Q = np.meshgrid(p,q)
     R = np.hstack((P.ravel().reshape(2500,1), Q.ravel().reshape(2500,1)))
     Z = net.inference(R)
