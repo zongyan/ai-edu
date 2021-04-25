@@ -6,7 +6,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-file_name = "../../data/ch05.npz"
+file_name = "../../SourceCode/Data/ch05.npz"
 
 def TargetFunction(x1,x2):
     w1,w2,b = 2,5,10
