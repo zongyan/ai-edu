@@ -21,9 +21,14 @@ from HelperClass.TrainingHistory_1_0 import *
 class NeuralNet_1_1(object):
     def __init__(self, hp):
         self.hp = hp
+        '''
+        the following two configure the dimension of matrices W and B, please 
+        check Section 4.5 & 4.0 for more details.
+        '''
         self.W = np.zeros((self.hp.input_size, self.hp.output_size))
         self.B = np.zeros((1, self.hp.output_size))
 
+        # batch is used now
     def __forwardBatch(self, batch_x):
         Z = np.dot(batch_x, self.W) + self.B
         return Z
@@ -48,6 +53,10 @@ class NeuralNet_1_1(object):
         loss = 10
         if self.hp.batch_size == -1:
             self.hp.batch_size = dataReader.num_train
+            
+        print(f"debug@NeuralNet_1_1: dataReader.num_train is {dataReader.num_train}")
+        # math.ceil rounds a number UP to the nearest integer,
+        # the idea of checking point is quite good, I can borrow this idea
         max_iteration = math.ceil(dataReader.num_train / self.hp.batch_size)
         checkpoint_iteration = (int)(max_iteration * checkpoint)
 
@@ -66,7 +75,7 @@ class NeuralNet_1_1(object):
 
                 total_iteration = epoch * max_iteration + iteration
                 if (total_iteration+1) % checkpoint_iteration == 0:
-                    loss = self.__checkLoss(dataReader)
+                    loss = self.__checkLoss(dataReader) # checking the loss of NN during the training progress 
                     print(epoch, iteration, loss, self.W, self.B)
                     loss_history.AddLossHistory(epoch*max_iteration+iteration, loss)
                     if loss < self.hp.eps:

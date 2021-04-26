@@ -42,19 +42,20 @@ class DataReader_1_1(object):
     #                [min3, range3]]
     def NormalizeX(self):
         X_new = np.zeros(self.XRaw.shape)
-        num_feature = self.XRaw.shape[1]
+        num_feature = self.XRaw.shape[1] 
         self.X_norm = np.zeros((num_feature,2))
+        print(f"debug@DataReader_1_1: num_feature is {num_feature}") # equal 2
         # 按列归一化,即所有样本的同一特征值分别做归一化
         for i in range(num_feature):
             # get one feature from all examples
-            col_i = self.XRaw[:,i]
-            max_value = np.max(col_i)
-            min_value = np.min(col_i)
+            col_i = self.XRaw[:,i] # for the i-th column
+            max_value = np.max(col_i) # max number in the i-th column
+            min_value = np.min(col_i) # min number in the i-th column
             # min value
             self.X_norm[i,0] = min_value 
             # range value
             self.X_norm[i,1] = max_value - min_value 
-            new_col = (col_i - self.X_norm[i,0])/(self.X_norm[i,1])
+            new_col = (col_i - self.X_norm[i,0])/(self.X_norm[i,1]) # 使用Min-Max标准化
             X_new[:,i] = new_col
         #end for
         self.XTrain = X_new
@@ -70,6 +71,7 @@ class DataReader_1_1(object):
 
     def NormalizeY(self):
         self.Y_norm = np.zeros((1,2))
+        print(f"debug@DataReader-1_1: np.zeros((1,2)) is {np.zeros((1,2))}")
         max_value = np.max(self.YRaw)
         min_value = np.min(self.YRaw)
         # min value
