@@ -100,6 +100,7 @@ class DataReader_1_1(object):
 
     # permutation only affect along the first axis, so we need transpose the array first
     # see the comment of this class to understand the data format
+    # ToDo： 我猜测这个shuffle的功能是为了打乱原本的数据的顺序的
     def Shuffle(self):
         seed = np.random.randint(0,100)
         np.random.seed(seed)
