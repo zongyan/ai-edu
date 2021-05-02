@@ -41,7 +41,7 @@ if __name__ == '__main__':
     HyperParameters_1_1定义的一些变量了。另外，这里就是需要注意的是，就是在NeuralNet_1_2
     里面，需要import HyperParameters_1_1类似的代码了（如line 15所示）
     """
-    params = HyperParameters_1_1(num_input, num_category, eta=0.1, max_epoch=2000, batch_size=10, eps=1e-3, net_type=NetType.MultipleClassifier)
+    params = HyperParameters_1_1(num_input, num_category, eta=0.1, max_epoch=10000, batch_size=10, eps=1e-3, net_type=NetType.MultipleClassifier)
     net = NeuralNet_1_2(params)
     net.train(reader, checkpoint=1)
 
