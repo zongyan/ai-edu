@@ -48,7 +48,7 @@ class NeuralNet_1_2(object):
     def inference(self, x):
         return self.forwardBatch(x)
 
-    def train(self, dataReader, checkpoint=0.1):
+    def train(self, dataReader, checkpoint=0.1): # 这里的dataReader，代表的是class（类）的意思
         # calculate loss to decide the stop condition
         loss_history = TrainingHistory_1_0()
         loss_function = LossFunction_1_0(self.hp.net_type)

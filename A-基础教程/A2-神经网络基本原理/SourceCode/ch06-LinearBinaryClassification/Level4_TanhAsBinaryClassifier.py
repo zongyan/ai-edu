@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from HelperClass.NeuralNet_1_2 import *
 from Level3_ShowBinaryResult import *
 
-file_name = "../../data/ch06.npz"
+file_name = "../../SourceCode/Data/ch06.npz"
 
 # step 1
 class TanhNeuralNet(NeuralNet_1_2):
@@ -33,7 +33,8 @@ class TanhNeuralNet(NeuralNet_1_2):
         return dW, dB
 
 
-class DataReader_tanh(DataReader_1_1):
+class DataReader_tanh(DataReader_1_1): # 在所有的class中，def的函数里面都是需要有一个self的
+                                       # 但是如果是在只有def的函数里面，就是不需要的，如line 52 
     def ToZeroOne(self):
         Y = np.zeros((self.num_train, 1))
         for i in range(self.num_train):
@@ -56,7 +57,10 @@ def draw_source_data(dataReader, show=False):
 # 主程序
 if __name__ == '__main__':
     # data
-    reader = DataReader_tanh(file_name)
+    reader = DataReader_tanh(file_name) # initialise the variable as a class, 
+                                        # (only calling '__init__')
+                                        # 这里的file_name对应的是DataReader_1_1
+                                        # 中的object
     reader.ReadData()
     reader.ToZeroOne()
     # net
@@ -64,7 +68,7 @@ if __name__ == '__main__':
     num_output = 1
     hp = HyperParameters_1_1(num_input, num_output, eta=0.1, max_epoch=1000, batch_size=10, eps=1e-3, net_type=NetType.BinaryTanh)
     net = TanhNeuralNet(hp)
-    net.train(reader, checkpoint=10)
+    net.train(reader, checkpoint=10) #  这里的reader是对应的line 59行的内容reader
 
     # show result
     draw_source_data(reader)

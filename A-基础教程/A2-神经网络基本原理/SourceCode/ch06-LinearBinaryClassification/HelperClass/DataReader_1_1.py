@@ -8,7 +8,7 @@ Version 1.1
 import numpy as np
 from pathlib import Path
 
-class DataReader_1_1(object):
+class DataReader_1_1(object): # 注意， 这里是使用的是object
     def __init__(self, data_file):
         self.train_file_name = data_file
         self.num_train = 0

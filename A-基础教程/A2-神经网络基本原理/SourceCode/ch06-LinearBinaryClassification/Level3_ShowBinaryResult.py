@@ -29,14 +29,13 @@ def draw_predicate_data(net, threshold=0.5):
     x = np.array([0.58,0.92,0.62,0.55,0.39,0.29]).reshape(3,2)
     a = net.inference(x)
     print("A=", a)
-    DrawTwoCategoryPoints(x[:,0], x[:,1], a[:,0], show=False, isPredicate=True)
-    """
+    # DrawTwoCategoryPoints(x[:,0], x[:,1], a[:,0], show=False, isPredicate=True)
     for i in range(3):
         if a[i,0] > threshold:
             plt.scatter(x[i,0], x[i,1], marker='^', c='r', s=200)
         else:
             plt.scatter(x[i,0], x[i,1], marker='^', c='b', s=200)
-    """
+    
 
 # 主程序
 if __name__ == '__main__':

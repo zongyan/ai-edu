@@ -85,7 +85,7 @@ def train(reader, title):
     # net train
     num_input = reader.XTrain.shape[1]
     num_output = 1
-    hp = HyperParameters_1_1(num_input, num_output, eta=0.5, max_epoch=10000, batch_size=1, eps=2e-3, net_type=NetType.BinaryClassifier)
+    hp = HyperParameters_1_1(num_input, num_output, eta=0.5, max_epoch=200, batch_size=1, eps=2e-3, net_type=NetType.BinaryClassifier)
     net = NeuralNet_1_2(hp)
     net.train(reader, checkpoint=1)
     # test
@@ -96,21 +96,21 @@ def train(reader, title):
     plt.show()
 
 if __name__ == '__main__':
-    reader = LogicDataReader()
-    reader.Read_Logic_NOT_Data()
-    train(reader, "Logic NOT operator")
+    # reader = LogicDataReader()
+    # reader.Read_Logic_NOT_Data()
+    # train(reader, "Logic NOT operator")
 
-    reader = LogicDataReader()
-    reader.Read_Logic_AND_Data()
-    train(reader, "Logic AND operator")
+    # reader = LogicDataReader()
+    # reader.Read_Logic_AND_Data()
+    # train(reader, "Logic AND operator")
 
-    reader = LogicDataReader()
-    reader.Read_Logic_NAND_Data()
-    train(reader, "Logic NAND operator")
+    # reader = LogicDataReader()
+    # reader.Read_Logic_NAND_Data()
+    # train(reader, "Logic NAND operator")
 
-    reader = LogicDataReader()
-    reader.Read_Logic_OR_Data()
-    train(reader, "Logic OR operator")
+    # reader = LogicDataReader()
+    # reader.Read_Logic_OR_Data()
+    # train(reader, "Logic OR operator")
 
     reader = LogicDataReader()
     reader.Read_Logic_NOR_Data()
