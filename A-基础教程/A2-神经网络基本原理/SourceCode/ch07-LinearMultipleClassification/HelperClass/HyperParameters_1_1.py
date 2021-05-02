@@ -4,7 +4,7 @@
 """
 Version 1.1
 """
-
+# 也是因为这里就是import了这个EnumDef_1_0，所以才是可以使用NetType这个结构的了。
 from HelperClass.EnumDef_1_0 import *
 
 class HyperParameters_1_1(object):

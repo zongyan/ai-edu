@@ -18,7 +18,11 @@ from HelperClass.LossFunction_1_1 import *
 from HelperClass.ClassifierFunction_1_1 import *
 
 class NeuralNet_1_2(object):
-    def __init__(self, params):
+    def __init__(self, params): # 从这里就是可以知道，这个params就是一个class，但
+                                # 在此文档中，就从没有出现过初始化params，怎么就是
+                                # 可以直接是调用HyperParameters_1_1中的变量呢，
+                                # 这个就是一直是让我匪夷所思的问题。 参见Ch07_Level_1
+                                # 的代码注释，我已经给出了解释了。
         self.params = params
         self.W = np.zeros((self.params.input_size, self.params.output_size))
         self.B = np.zeros((1, self.params.output_size))
@@ -29,7 +33,7 @@ class NeuralNet_1_2(object):
             A = Logistic().forward(Z)
             return A
         elif self.params.net_type == NetType.MultipleClassifier:
-            A = Softmax().forward(Z)
+            A = Softmax().forward(Z) # 把输出的Z值作为输入，传递到softmax function里面
             return A
         else:
             return Z

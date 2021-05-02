@@ -43,7 +43,9 @@ class DataReader_1_3(object):
             self.XTrain = self.XRaw
             self.YTrain = self.YRaw
         else:
-            raise Exception("Cannot find train file!!!")
+            raise Exception("Cannot find train file!!!") # 我个人认为这个是一个
+                                                         # 非常好的读取文件的代码
+                                                         # 习惯，值得学习
         #end if
 
     # normalize data by extracting range from source data
@@ -97,6 +99,8 @@ class DataReader_1_3(object):
         y_new = np.zeros((count, self.num_category))
         for i in range(count):
             n = (int)(self.YRaw[i,0])
+            # print(f"debug: n is {n}")
+            # print(f"debug: base is {base}")
             y_new[i,n-base] = 1
         self.YTrain = y_new
 

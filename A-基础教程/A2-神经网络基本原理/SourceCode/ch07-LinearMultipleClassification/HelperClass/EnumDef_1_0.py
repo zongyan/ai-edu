@@ -5,6 +5,8 @@
 Version 1.0
 """
 
+# 这个文件夹中就是定义了各种不同的NetType的
+
 from enum import Enum
 
 class NetType(Enum):
