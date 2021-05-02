@@ -9,7 +9,7 @@ import math
 from HelperClass.NeuralNet_1_2 import *
 from HelperClass.Visualizer_1_0 import *
 
-file_name = "../../data/ch07.npz"
+file_name = "../../SourceCode/Data/ch07.npz"
 
 def ShowData(X,Y):
     fig = plt.figure(figsize=(6,6))
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     reader.NormalizeX()
 
     num_input = 2
-    params = HyperParameters_1_1(num_input, num_category, eta=0.1, max_epoch=100, batch_size=10, eps=1e-3, net_type=NetType.MultipleClassifier)
+    params = HyperParameters_1_1(num_input, num_category, eta=0.1, max_epoch=5000, batch_size=10, eps=1e-3, net_type=NetType.MultipleClassifier)
     net = NeuralNet_1_2(params)
     net.train(reader, checkpoint=1)
 
