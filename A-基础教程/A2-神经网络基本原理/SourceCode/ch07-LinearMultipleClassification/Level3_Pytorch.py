@@ -13,7 +13,7 @@ from torch.optim import Adam
 import warnings
 warnings.filterwarnings('ignore')
 
-file_name = "../../data/ch07.npz"
+file_name = "../../SourceCode/Data/ch07.npz"
 
 def ShowResult(W, B, X, Y, xt, yt):
     fig = plt.figure(figsize=(6,6))
@@ -51,7 +51,8 @@ class Model(nn.Module):
         self.fc = nn.Linear(input_size, class_num)
     def forward(self, x):
         x = self.fc(x)
-        x = F.softmax(x)
+        x = F.softmax(x) # 这里就是使用了softmax函数，对应的另外一个版本的代码，是
+                         # 在output层输出。 
         return x
 
 if __name__ == '__main__':

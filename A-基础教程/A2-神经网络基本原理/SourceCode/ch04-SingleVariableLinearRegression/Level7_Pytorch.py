@@ -31,7 +31,15 @@ if __name__ == '__main__':
     num_input = 1       # input size
     # get numpy form data
     XTrain, YTrain = sdr.XTrain, sdr.YTrain
+    print(f"\ndebug: XTrain is {XTrain} \n")
+    print(f"\ndebug: YTrain is {YTrain} \n")
+    
     torch_dataset = TensorDataset(torch.FloatTensor(XTrain), torch.FloatTensor(YTrain))
+ 
+    print(f"\ndebug: torch.FloatTensor(XTrain) is {torch.FloatTensor(XTrain)} \n")
+    print(f"\ndebug: torch.FloatTensor(YTrain) is {torch.FloatTensor(YTrain)} \n")
+    print(f"\ndebug: torch_dataset is {torch_dataset} \n")
+
 
     train_loader = DataLoader(          # data loader class
         dataset=torch_dataset,
@@ -41,8 +49,10 @@ if __name__ == '__main__':
 
     loss_func = nn.MSELoss()
     model = Model(num_input)
+    # model = Model().to("cpu") # specify the CPU for use
     optimizer = Adam(model.parameters(), lr=1e-2)
 
+    model.train() # set mode
     e_loss = []     # mean loss at every epoch
     for epoch in range(max_epoch):
         b_loss = []     # mean loss at every batch
@@ -50,7 +60,13 @@ if __name__ == '__main__':
             optimizer.zero_grad()
             pred = model(batch_x)
             loss = loss_func(pred,batch_y)
-            b_loss.append(loss.cpu().data.numpy())
+            b_loss.append(loss.cpu().data.numpy()) # change from tensor to array
+            """
+            .cpu() copies the tensor to the CPU.
+            .numpy() creates a NumPy array from the tensor. The tensor and the 
+            array share the underlying memory, therefore if the NumPy array is 
+            modified in-place, the changes will be reflected in the original tensor.
+            """
             loss.backward()
             optimizer.step()
             b_loss.append(loss.cpu().data.numpy())
