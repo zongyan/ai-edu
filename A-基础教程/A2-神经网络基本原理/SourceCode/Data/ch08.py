@@ -5,8 +5,8 @@ import numpy as np
 from pathlib import Path
 import matplotlib.pyplot as plt
 
-train_data_name = "../../data/ch08.train.npz"
-test_data_name = "../../data/ch08.test.npz"
+train_data_name = "../../SourceCode/Data/ch08.train.npz"
+test_data_name = "../../SourceCode/Data/ch08.test.npz"
 
 def TargetFunction(x):
     p1 = np.sin(6.28*x)

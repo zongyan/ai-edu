@@ -6,12 +6,13 @@ import matplotlib.pyplot as plt
 
 from HelperClass.NeuralNet_1_2 import *
 
-file_name = "../../data/ch08.train.npz"
+file_name = "../../SourceCode/Data/ch08.train.npz"
 
 class DataReaderEx(DataReader_1_3):
     def Add(self):
         X = self.XTrain[:,]**2
-        self.XTrain = np.hstack((self.XTrain, X))
+        self.XTrain = np.hstack((self.XTrain, X)) # Stack arrays in sequence 
+                                                  # horizontally (column wise)
         X = self.XTrain[:,0:1]**3
         self.XTrain = np.hstack((self.XTrain, X))
         X = self.XTrain[:,0:1]**4
