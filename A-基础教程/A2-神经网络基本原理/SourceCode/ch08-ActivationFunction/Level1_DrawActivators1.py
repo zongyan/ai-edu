@@ -16,11 +16,13 @@ from Activators.BenIdentity import *
 def Draw(start,end,func,lable1,lable2):
     z = np.linspace(start, end, 200)
     a = func.forward(z)
-    da, dz = func.backward(z, a, 1)
+    da, dz = func.backward(z, a, 1) # dz暂时没有用到，Section 8.1中也是没有提到
 
     p1, = plt.plot(z,a)
     p2, = plt.plot(z,da)
-    plt.legend([p1,p2], [lable1, lable2])
+    plt.legend([p1,p2], [lable1, lable2]) # 这个legend的方式比我的复杂一些，和我
+                                          # 的不同在于，这个方式就是把多了legend
+                                          # 放到一起了，这一点比我的好
     plt.grid()
     plt.xlabel("input : z")
     plt.ylabel("output : a")
