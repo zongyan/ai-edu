@@ -51,22 +51,28 @@ class NeuralNet_2_0(object):
         elif self.hp.net_type == NetType.MultipleClassifier:
             self.A2 = Softmax().forward(self.Z2)
         else:   # NetType.Fitting
-            self.A2 = self.Z2
+            self.A2 = self.Z2 # 这里确实是没有加入这个激活函数的。
         #end if
         self.output = self.A2
         return self.output
 
     def backward(self, batch_x, batch_y, batch_a):
-        # 批量下降，需要除以样本数量，否则会造成梯度爆炸
+        # 批量下降，需要除以样本数量(注意和多样本特征值区分)，否则会造成梯度爆炸
         m = batch_x.shape[0]
-        # 第二层的梯度输入 公式5
+        # 第二层的梯度输入 公式5， 这个不像是公式5里面的标量，他是一个vector，因为
+        # 使用了batch，所以就是一系列的数据(1 x m)。
         dZ2 = self.A2 - batch_y
-        # 第二层的权重和偏移 公式6
+        # 第二层的权重和偏移 公式6 dot是矩阵相乘，但是我还是对这个除以样本数量的理由有点
+        # 模糊，虽然他说了是为了避免梯度爆炸
         self.wb2.dW = np.dot(self.A1.T, dZ2)/m 
-        # 公式7 对于多样本计算，需要在横轴上做sum，得到平均值
-        self.wb2.dB = np.sum(dZ2, axis=0, keepdims=True)/m 
+        # 公式7 对于多样本计算，需要在横轴上做sum，得到平均值。 axis=0 代表了横轴， 
+        # axis=1代表了纵轴。 因为是多个样本，而我们的第二层（即输出层）仅仅是有一个
+        # 神经网络。所以就是需要求均值。
+        self.wb2.dB = np.sum(dZ2, axis=0, keepdims=True)/m
+        
         # 第一层的梯度输入 公式8
         d1 = np.dot(dZ2, self.wb2.W.T) 
+        
         # 第一层的dZ 公式10
         dZ1,_ = Sigmoid().backward(None, self.A1, d1)
         # 第一层的权重和偏移 公式11

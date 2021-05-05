@@ -34,7 +34,7 @@ class Sigmoid(CActivator):
         return a
 
     def backward(self, z, a, delta):
-        da = np.multiply(a, 1-a)
+        da = np.multiply(a, 1-a) # Equivalent to x1 * x2 in terms of array broadcasting.
         dz = np.multiply(delta, da)
         return dz, da
 
