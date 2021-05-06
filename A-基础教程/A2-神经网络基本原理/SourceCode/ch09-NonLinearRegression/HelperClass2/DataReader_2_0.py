@@ -47,6 +47,7 @@ class DataReader_2_0(object):
     # read data from file
     def ReadData(self):
         train_file = Path(self.train_file_name)
+        print(f"debug: train_file is {train_file}")
         if train_file.exists():
             data = np.load(self.train_file_name)
             self.XTrainRaw = data["data"]

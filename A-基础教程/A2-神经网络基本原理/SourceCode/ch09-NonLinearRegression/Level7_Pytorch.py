@@ -10,8 +10,8 @@ import torch.nn.init as init
 import warnings
 warnings.filterwarnings('ignore')
 
-train_data_name = "../../Data/ch09.train.npz"
-test_data_name = "../../Data/ch09.test.npz"
+train_data_name = "../../SourceCode/Data/ch09.train.npz"
+test_data_name = "../../SourceCode/Data/ch09.test.npz"
 
 class Model(nn.Module):
     def __init__(self):
@@ -29,7 +29,7 @@ class Model(nn.Module):
         for m in self.modules():
             print(m)
             if isinstance(m, nn.Linear):
-                init.xavier_uniform_(m.weight, gain=1)
+                init.xavier_uniform_(m.weight, gain=1) #  Values are scaled by the gain parameter
                 print(m.weight)
 
 def ShowResult(model, dataReader):
@@ -62,6 +62,9 @@ if __name__ == '__main__':
     mse_loss = nn.MSELoss()
     optimizer = Adam(model.parameters(), lr=lr)
 
+    # 数据得转换成tensor的形式，用于训练NN模型，另外，就是和house price不同的地方在
+    # 于，house price是在数据初始化的时候，就是已经是完成了这个数据的处理、载入了。
+    # 但是这部分的代码就是在这里完成了这部分的工作的了。
     torch_dataset = TensorDataset(torch.FloatTensor(dataReader.XTrain), torch.FloatTensor(dataReader.YTrain))
     XVal, YVal = torch.FloatTensor(dataReader.XDev), torch.FloatTensor(dataReader.YDev)
     train_loader = DataLoader(  # data loader class

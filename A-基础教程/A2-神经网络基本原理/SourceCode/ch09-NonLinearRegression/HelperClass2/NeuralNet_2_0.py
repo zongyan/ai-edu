@@ -23,9 +23,10 @@ class NeuralNet_2_0(object):
     def __init__(self, hp, model_name):
         self.hp = hp
         self.model_name = model_name
+        # 这个subfolder的存储方式，我觉得思路非常值得借鉴的
         self.subfolder = os.getcwd() + "\\" + self.__create_subfolder()
         print(self.subfolder)
-
+        # 下面四行是定义weights的了。
         self.wb1 = WeightsBias_1_0(self.hp.num_input, self.hp.num_hidden, self.hp.init_method, self.hp.eta)
         self.wb1.InitializeWeights(self.subfolder, False)
         self.wb2 = WeightsBias_1_0(self.hp.num_hidden, self.hp.num_output, self.hp.init_method, self.hp.eta)
@@ -34,10 +35,13 @@ class NeuralNet_2_0(object):
     def __create_subfolder(self):
         if self.model_name != None:
             path = self.model_name.strip()
-            path = path.rstrip("\\")
+            print(f"debug: path is {path}")
+            path = path.rstrip("\\") # 如果最后是\\， 删除掉
+            print(f"debug: path is {path}")
             isExists = os.path.exists(path)
-            if not isExists:
-                os.makedirs(path)
+            print(f"debug: os.path.exists(path) is {os.path.exists(path)}")
+            if not isExists: 
+                os.makedirs(path) # 如过不存在， 就是需要创建一个子文件夹
             return path
 
     def forward(self, batch_x):
