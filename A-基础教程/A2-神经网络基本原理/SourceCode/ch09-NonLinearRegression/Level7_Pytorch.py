@@ -17,7 +17,17 @@ class Model(nn.Module):
     def __init__(self):
         super(Model, self).__init__()
         self.fc1 = nn.Linear(1, 3, bias=True)
-        self.fc2 = nn.Linear(3, 1, bias=True)
+        self.fc2 = nn.Linear(3, 1, bias=True)        
+        """
+        在使用PyTorch进行定义神经网路的时候，就是发现了只要在__init__(self)里面定义
+        隐藏层就是可以的了，然后就是在__main__()里面初始化这个神经网络就是可以的了。
+        
+        在训练的时候，按理说是需要用进行进行正向计算出这个神经网络的输出值的。所以逻辑
+        上就是需要调用forward函数的。但是呢，在实际的PyTorch中，并没有看到这个步骤（
+        查看多个代码之后，都是如此）。所以我的猜想，就是这个forward这个可能就是一个隐
+        性的keyword，大家就是约定俗称这么使用这个forward，然后也是不需要调用这个函数。        
+        而是直接是使用类似于line 91（本代码）就是可以了。
+        """
     def forward(self, x):
         x = F.sigmoid(self.fc1(x))
         x = self.fc2(x)
