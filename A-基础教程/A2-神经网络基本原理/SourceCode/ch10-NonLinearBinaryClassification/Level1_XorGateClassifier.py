@@ -14,7 +14,11 @@ from HelperClass2.NeuralNet_2_1 import *
 # x1=1,x2=1,y=0
 class XOR_DataReader(DataReader_2_0):
     def __init__(self):
-        pass
+        pass # The pass statement is used as a placeholder for future code.
+             # When the pass statement is executed, nothing happens, but you 
+             # avoid getting an error when empty code is not allowed.
+             # Empty code is not allowed in loops, function definitions, class 
+             # definitions, or in if statements.
 
     def ReadData(self):
         self.XTrain = np.array([0,0,0,1,1,0,1,1]).reshape(4,2)
@@ -22,7 +26,9 @@ class XOR_DataReader(DataReader_2_0):
 
         self.num_category = 1
         self.num_train = self.XTrain.shape[0]
+        print(f"debug: self.num_train is {self.num_train}") # --> 4
         self.num_feature = self.XTrain.shape[1]
+        print(f"debug: self.num_feature is {self.num_feature}") # --> 2
 
         self.XTest = self.XTrain
         self.YTest = self.YTrain
@@ -38,6 +44,16 @@ def Test(dataReader, net):
     print("A2=",A2)
     diff = np.abs(A2-Y)
     result = np.where(diff < 1e-2, True, False)
+    """
+    a = np.array([[0, 1, 2],
+                  [0, 2, 4],
+                  [0, 3, 6]])
+    np.where(a < 4, a, -1)  # -1 is broadcast
+    results are ----->
+    array([[ 0,  1,  2],
+           [ 0,  2, -1],
+           [ 0,  3, -1]])    
+    """
     if result.sum() == dataReader.num_test:
         return True
     else:
