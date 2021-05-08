@@ -37,7 +37,7 @@ class TrainingHistory_2_1(object):
     def ShowLossHistory(self, params, xmin=None, xmax=None, ymin=None, ymax=None):
         fig = plt.figure(figsize=(12,5))
 
-        axes = plt.subplot(1,2,1)
+        axes = plt.subplot(1,2,1) # 这个subplot的方式，就是和matlab还是非常类似的了。
         #p2, = axes.plot(self.iteration_seq, self.loss_train)
         #p1, = axes.plot(self.iteration_seq, self.loss_val)
         p2, = axes.plot(self.epoch_seq, self.loss_train)

@@ -48,7 +48,10 @@ class DataReader_2_0(object):
     def ReadData(self):
         train_file = Path(self.train_file_name)
         if train_file.exists():
-            data = np.load(self.train_file_name)
+            data = np.load(self.train_file_name) # 因为在ch10.py中，就是使用numpy
+                                                 # 的数据包进行保存数据的，这里就
+                                                 # 自然而然的会选择numpy.load的
+                                                 # 的形式进行数据载入的了。
             self.XTrainRaw = data["data"]
             self.YTrainRaw = data["label"]
             assert(self.XTrainRaw.shape[0] == self.YTrainRaw.shape[0])
@@ -201,3 +204,22 @@ class DataReader_2_0(object):
         YP = np.random.permutation(self.YTrain)
         self.XTrain = XP
         self.YTrain = YP
+    """
+    本来是想着是不是可以直接是使用numpy.random.shuffle来进行这个shuffle数据集的，
+    但是后来测试的结果并不是很理解，按理说，就算是我们每一次重置seed，但是两次shuffle
+    得到的sequence的结果都是不一样的了，但是为了保证这个X&Y的顺序是匹配的，就只能够
+    使用permutation。
+        
+    sequence = [i for i in range(20)]
+    print(sequence)
+
+    numpy.random.seed(1)
+    shuffle(sequence)
+    print(sequence)
+
+    numpy.random.seed(1)
+    shuffle(sequence)
+    print(sequence)
+
+    """
+    
