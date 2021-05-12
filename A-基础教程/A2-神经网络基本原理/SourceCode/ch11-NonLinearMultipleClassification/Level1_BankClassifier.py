@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 from HelperClass2.NeuralNet_2_2 import *
 from HelperClass2.Visualizer_1_1 import *
 
-train_data_name = "../../Data/ch11.train.npz"
-test_data_name = "../../Data/ch11.test.npz"
+train_data_name = "../../SourceCode/Data/ch11.train.npz"
+test_data_name = "../../SourceCode/Data/ch11.test.npz"
 
 if __name__ == '__main__':
     dataReader = DataReader_2_0(train_data_name, test_data_name)
@@ -24,10 +24,10 @@ if __name__ == '__main__':
     dataReader.GenerateValidationSet()
 
     n_input = dataReader.num_feature
-    n_hidden = 3
+    n_hidden = 9
     n_output = dataReader.num_category
-    eta, batch_size, max_epoch = 0.1, 10, 5000
-    eps = 0.1
+    eta, batch_size, max_epoch = 0.05, 10, 30000
+    eps = 0.05
 
     hp = HyperParameters_2_0(n_input, n_hidden, n_output, eta, max_epoch, batch_size, eps, NetType.MultipleClassifier, InitialMethod.Xavier)
     net = NeuralNet_2_2(hp, "Bank_233")
