@@ -8,8 +8,8 @@ from mpl_toolkits.mplot3d import Axes3D
 from HelperClass2.NeuralNet_2_2 import *
 from HelperClass2.Visualizer_1_1 import *
 
-train_data_name = "../../Data/ch11.train.npz"
-test_data_name = "../../Data/ch11.test.npz"
+train_data_name = "../../SourceCode/Data/ch11.train.npz"
+test_data_name = "../../SourceCode/Data/ch11.test.npz"
 
 
 def Show3D(net, dr):
