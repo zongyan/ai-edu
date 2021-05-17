@@ -131,7 +131,14 @@ class NeuralNet_3_0(object):
                 self.backward(batch_x, batch_y)
                 # update w,b
                 self.update()
-
+                
+                """
+                其实上面的三行代码， 即Line 129 -> 133就是一个训练网络的标准过程，
+                到目前位置，对于这一种linear & linear regression & classification
+                的应用来说，我个人认为我是可以轻松应对了，就是对于这个数据的准备阶段，
+                就是不太数量的了。
+                """
+                
                 total_iteration = epoch * max_iteration + iteration
                 if (total_iteration+1) % checkpoint_iteration == 0:
                     need_stop = self.CheckErrorAndLoss(dataReader, batch_x, batch_y, epoch, total_iteration)

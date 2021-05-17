@@ -121,7 +121,7 @@ if __name__ == '__main__':
     plt.show()
 
     train(dataReader, 20)
-    train(dataReader, 50)
+    train(dataReader, 50) # 重新开始训练，而不是接着之前的训练结果继续训练。
     train(dataReader, 100)
     train(dataReader, 150)
     train(dataReader, 200)

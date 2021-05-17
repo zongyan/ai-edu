@@ -11,15 +11,16 @@ import torch.nn.init as init
 import warnings
 warnings.filterwarnings('ignore')
 
-train_data_name = "../../Data/ch10.train.npz"
-test_data_name = "../../Data/ch10.test.npz"
+train_data_name = "../../SourceCode/Data/ch10.train.npz"
+test_data_name = "../../SourceCode/Data/ch10.test.npz"
 
 class Model(nn.Module):
     def __init__(self):
         super(Model, self).__init__()
         self.fc1 = nn.Linear(2, 3, bias=True)
         self.fc2 = nn.Linear(3, 2, bias=True)
-    def forward(self, x):
+    def forward(self, x): # 需要自己主动定义这个function，但是在代码中，并不需要调用
+                          # 这个function
         x = F.sigmoid(self.fc1(x))
         x = F.softmax(self.fc2(x))
         return x
@@ -105,7 +106,7 @@ if __name__ == '__main__':
         val_pred = model(XVal)
         bv_loss = mse_loss(val_pred, YVal).cpu().data.numpy()
         et_loss.append(np.mean(bt_loss))
-        ev_loss.append(bv_loss)
+        ev_loss.append(bv_loss) # 使用validation set计算出loss进行评判training性能
         print("Epoch: [%d / %d], Training Loss: %.6f, Val Loss: %.6f" % (epoch, max_epoch, np.mean(bt_loss), bv_loss))
 
 

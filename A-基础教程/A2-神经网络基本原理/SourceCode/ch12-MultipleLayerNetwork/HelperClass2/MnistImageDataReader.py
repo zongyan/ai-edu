@@ -58,6 +58,12 @@ class MnistImageDataReader(DataReader_2_0):
             self.num_feature = 784
         self.num_validation = 0
 
+
+    """
+    下面的两个function，都是使用读取文件的形式来处理数据，这个和之前遇到的方式，比如
+    使用numpy，pandas的方式都是不一样的
+    """
+
     # output array: num_images * channel * 28 * 28
     # due to gray image instead of color, so channel = 1
     def __ReadImageFile(self, image_file_name):

@@ -11,8 +11,8 @@ import torch.nn.init as init
 import warnings
 warnings.filterwarnings('ignore')
 
-train_data_name = "../../Data/ch11.train.npz"
-test_data_name = "../../Data/ch11.test.npz"
+train_data_name = "../../SourceCode/Data/ch11.train.npz"
+test_data_name = "../../SourceCode/Data/ch11.test.npz"
 
 class Model(nn.Module):
     def __init__(self):
@@ -57,6 +57,12 @@ if __name__ == '__main__':
 
     num_train = dataReader.YTrain.shape[0]
     num_val = dataReader.YDev.shape[0]
+
+    """
+    使用PyTorch的整个流程，我都是清楚的了。但是还是有一个地方就是没有把握，就是这个数
+    据集的准备上，具体点说，就是在转换成tensor的格式上面了，这里就是需要额外小心，以及
+    额外的工作量&专研。
+    """
 
     torch_dataset = TensorDataset(torch.FloatTensor(dataReader.XTrain), torch.LongTensor(dataReader.YTrain.reshape(num_train,)))
     XVal, YVal = torch.FloatTensor(dataReader.XDev), torch.LongTensor(dataReader.YDev.reshape(num_val,))
