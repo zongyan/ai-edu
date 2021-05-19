@@ -117,7 +117,8 @@ class NeuralNet_4_0(object):
         # end for
         self.CheckErrorAndLoss(dataReader, batch_x, batch_y, epoch, total_iteration)
 
-        t1 = time.time()
+        t1 = time.time() # 这个是一个非常有意思的东西了，就是可以告诉花了多长时间，
+                         # 就是训练结束的
         print("time used:", t1 - t0)
 
         self.save_parameters()
@@ -164,7 +165,7 @@ class NeuralNet_4_0(object):
             var = np.var(y)
             mse = np.sum((a-y)**2)/a.shape[0]
             r2 = 1 - mse / var
-            return r2
+            return r2 # 这里就是计算R2的，其实只要领悟了R2的公式，就是很简单的事情。
         elif self.hp.net_type == NetType.BinaryClassifier:
             b = np.round(a)
             r = (b == y)

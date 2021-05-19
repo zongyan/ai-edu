@@ -106,4 +106,4 @@ if __name__ == '__main__':
     print("mse=", mse)
     
     net.ShowLossHistory()
-    ShowResult(net, dr)
+    ShowResult(net, dr) # 其实，这个图也是非常值得借鉴的了。
