@@ -4,11 +4,11 @@
 import numpy as np
 import csv
 
-train_data = "../../Data/adult.data"
-test_data = "../../Data/adult.test"
+train_data = "../../../SourceCode/Data/adult.data"
+test_data = "../../../SourceCode/Data/adult.test"
 
-train_data_npz = "../../Data/ch14.Income.train.npz"
-test_data_npz = "../../Data/ch14.Income.test.npz"
+train_data_npz = "../../../SourceCode/Data/ch14.Income.train.npz"
+test_data_npz = "../../../SourceCode/Data/ch14.Income.test.npz"
 
 workclass_list = ["Private", "Self-emp-not-inc", "Self-emp-inc", "Federal-gov", "Local-gov", "State-gov", "Without-pay", "Never-worked"]
 education_list = ["Bachelors", "Some-college", "11th", "HS-grad", "Prof-school", "Assoc-acdm", "Assoc-voc", "9th", "7th-8th", "12th", "Masters", "1st-4th", "10th", "Doctorate", "5th-6th", "Preschool"]

@@ -7,7 +7,7 @@ from MiniFramework.Layer import *
 
 class ActivationLayer(CLayer):
     def __init__(self, activator):
-        self.activator = activator
+        self.activator = activator # 这里的activator指的是sigmoid，Tanh等
 
     def forward(self, input, train=True):
         self.input_shape = input.shape
@@ -17,7 +17,10 @@ class ActivationLayer(CLayer):
 
     # 把激活函数算做是当前层，上一层的误差传入后，先经过激活函数的导数，而得到本层的针对z值的误差
     def backward(self, delta_in, flag):
-        dZ = self.activator.backward(self.x, self.a, delta_in)
+        dZ = self.activator.backward(self.x, self.a, delta_in) # 这里就是会调用
+                                                               # 对于的activator 
+                                                               # function, 见40
+                                                               # 行及以下
         return dZ
 
 class CActivator(object):

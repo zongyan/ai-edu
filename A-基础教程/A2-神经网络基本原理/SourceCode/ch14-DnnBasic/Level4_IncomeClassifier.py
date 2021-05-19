@@ -9,8 +9,12 @@ from MiniFramework.NeuralNet_4_0 import *
 from MiniFramework.ActivationLayer import *
 from MiniFramework.ClassificationLayer import *
 
-train_file = "../../Data/ch14.Income.train.npz"
-test_file = "../../Data/ch14.Income.test.npz"
+train_file = "../../SourceCode/Data/ch14.Income.train.npz"
+test_file = "../../SourceCode/Data/ch14.Income.train.npz"
+# test_file = "../../SourceCode/Data/ch14.Income.test.npz" 
+# 在处理test数据的时候，没有办法把这个数据处理完成（出现bug），所以我就是会使用这个train
+# 数据来代替test数据，主要也是为了过一遍代码的需要，并不是真正的需要测试这个trained
+# model的性能
 
 def LoadData():
     dr = DataReader_2_0(train_file, test_file)
