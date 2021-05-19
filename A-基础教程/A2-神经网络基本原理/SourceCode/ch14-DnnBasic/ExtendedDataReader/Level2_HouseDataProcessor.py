@@ -5,11 +5,11 @@ import numpy as np
 import csv
 import copy
 
-data_file_name = "../../Data/kc_house_data.csv"     # download from Kc
+data_file_name = "../../../SourceCode/Data/kc_house_data.csv"     # download from Kc
 train_data_file_name = "../../Data/kc_train.csv"    # download from DC
 test_data_file_name = "../../Data/kc_test.csv"      # download from DC
-train_file = "../../Data/ch14.house.train.npz"
-test_file = "../../Data/ch14.house.test.npz"
+train_file = "../../../SourceCode/Data/ch14.house.train.npz"
+test_file = "../../../SourceCode/Data/ch14.house.test.npz"
 
 class HouseDataProcessor(object):
     def PrepareData(self, csv_file, npz_file):
