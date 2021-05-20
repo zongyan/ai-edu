@@ -7,10 +7,10 @@ import numpy as np
 import struct
 from MiniFramework.DataReader_2_0 import *
 
-train_image_file = '../../Data/train-images-10'
-train_label_file = '../../Data/train-labels-10'
-test_image_file = '../../Data/test-images-10'
-test_label_file = '../../Data/test-labels-10'
+train_image_file = '../../SourceCode/Data/train-images-10.gz'
+train_label_file = '../../SourceCode/Data/train-labels-10.gz'
+test_image_file = '../../SourceCode/Data/test-images-10.gz'
+test_label_file = '../../SourceCode/Data/test-labels-10.gz'
 
 class MnistImageDataReader(DataReader_2_0):
     # mode: "image"=Nx1x28x28,  "vector"=1x784
