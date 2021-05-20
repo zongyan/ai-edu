@@ -111,3 +111,9 @@ if __name__ == '__main__':
 
     hp.init_method = InitialMethod.MSRA
     model_relu(num_input, num_hidden, num_output, hp)
+    
+    """
+    这里补充一个小知识，也是从这部分的代码观察到的，对于这个sigmoid激活函数来说，就是
+    使用Xavier的初始化方式；
+    但是对于RelU来说，就是使用MSRA的初始化方式。
+    """
