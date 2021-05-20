@@ -11,8 +11,8 @@ from MiniFramework.ActivationLayer import *
 from MiniFramework.ClassificationLayer import *
 from MiniFramework.DataReader_2_0 import *
 
-train_file = "../../Data/ch11.train.npz"
-test_file = "../../Data/ch11.test.npz"
+train_file = "../../SourceCode/Data/ch11.train.npz"
+test_file = "../../SourceCode/Data/ch11.test.npz"
 
 def LoadData():
     dr = DataReader_2_0(train_file, test_file)
@@ -106,7 +106,8 @@ if __name__ == '__main__':
         net_type=NetType.MultipleClassifier,
         init_method=InitialMethod.Xavier,
         stopper=Stopper(StopCondition.StopLoss, 0.08))
-    model_sigmoid(num_input, num_hidden, num_output, hp)
+    model_sigmoid(num_input, num_hidden, num_output, hp) # 这个function里面，
+    #就是已经是包含了定义neural network的过程，以及这个训练的过程了。
 
     hp.init_method = InitialMethod.MSRA
     model_relu(num_input, num_hidden, num_output, hp)
