@@ -41,7 +41,7 @@ class NeuralNet_4_0(object):
             return path
 
     def add_layer(self, layer, name=""):
-        layer.initialize(self.subfolder)
+        layer.initialize(self.subfolder) # 把subfolder的数值传递给了folder 
         self.layer_list.append(layer)
         self.layer_name.append(name)
         self.layer_count += 1

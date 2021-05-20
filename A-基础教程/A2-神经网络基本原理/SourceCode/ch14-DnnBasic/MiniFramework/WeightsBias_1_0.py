@@ -15,7 +15,7 @@ class WeightsBias_1_0(object):
         self.initial_value_filename = str.format("w_{0}_{1}_{2}_init", self.num_input, self.num_output, self.init_method.name)
 
     def InitializeWeights(self, folder, create_new):
-        self.folder = folder
+        self.folder = folder # 检查folder是否存在，如果存在，就是载入参数
         if create_new:
             self.__CreateNew()
         else:

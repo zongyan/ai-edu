@@ -60,7 +60,8 @@ def model(dr):
     net.add_layer(a3, "relu3")
 
     fc4 = FcLayer_1_0(num_hidden3, num_hidden4, params)
-    net.add_layer(fc4, "fc4")
+    net.add_layer(fc4, "fc4") # 在这段代码里面，add_layer的self数值变成fc4这一层 
+                              # layer，相应的数据，比如W & B都是会和fc4联系在一起。
     a4 = ActivationLayer(Relu())
     net.add_layer(a4, "relu4")
 

@@ -20,6 +20,10 @@ sex_list = ["Female", "Male"]
 native_country_list = ["United-States","Cambodia","England","Puerto-Rico","Canada","Germany","Outlying-US(Guam-USVI-etc)","India","Japan","Greece","South","China","Cuba","Iran","Honduras","Philippines","Italy","Poland","Jamaica","Vietnam","Mexico","Portugal","Ireland","France","Dominican-Republic","Laos","Ecuador","Taiwan","Haiti","Columbia","Hungary","Guatemala","Nicaragua","Scotland","Thailand","Yugoslavia","El-Salvador","Trinadad&Tobago","Peru","Hong","Holand-Netherlands"]
 label = ["<=50K", ">50K"]
 
+"""
+下面的这段代码，就是在处理raw data的时候，是可以借鉴使用的。特别是这个try： except，我
+暂时还是没有使用过。
+"""
 class IncomeDataProcessor(object):
     def PrepareData(self, csv_file, data_npz):
         self.XData = None
