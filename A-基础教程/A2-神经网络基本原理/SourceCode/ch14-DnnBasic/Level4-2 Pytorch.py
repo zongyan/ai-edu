@@ -8,13 +8,13 @@ import matplotlib.pyplot as plt
 import torch.nn as nn
 import torch.nn.functional as F
 import torch
-from torch.optim import Adam
+from torch.optim import Adam # 是从torch.optim导入Adam
 import torch.nn.init as init
 import warnings
 warnings.filterwarnings('ignore')
 
-train_file = "../../Data/ch14.Income.train.npz"
-test_file = "../../Data/ch14.Income.test.npz"
+train_file = "../../SourceCode/Data/ch14.Income.train.npz"
+test_file = "../../SourceCode/Data/ch14.Income.train.npz"
 
 def LoadData():
     dr = DataReader_2_0(train_file, test_file)
@@ -45,7 +45,7 @@ class Model(nn.Module):
 
         for m in self.modules():
             print(m)
-            if isinstance(m, nn.Linear):
+            if isinstance(m, nn.Linear): # 判断m是不是全链接层
                 init.xavier_uniform_(m.weight, gain=1)
                 print(m.weight)
 
@@ -68,6 +68,18 @@ if __name__ == '__main__':
     num_train = dataReader.YTrain.shape[0]
     num_val = dataReader.YDev.shape[0]
 
+    """
+    其实之前网上找的regression tutorial和这个tutorial在数据处理上还是有相似之初。
+    比如说，都是先是处理完数据，然后就是把数据转成tensor的格式（如使用torch.tensor或
+    torch.FloatTensor或torch.LongTensor的形式）
+    
+    然后接着就是用TensorDataset把数据wrapping起来（不过这个步骤，在regression 
+    tutorial是没有看见的）。我不认为是两者谁有错误，而是说regression tutorial的方式
+    就是高级一些，有部分功能可能就是隐藏性的做了，比如定义class HouseDataset(T.utils.data.Dataset):
+    的时候。_____所以，暂时还是先使用本tutorial的方式，等时机成熟了，再转。
+    
+    最后，就是可以使用DataLoader对数据进行载入了。    
+    """
     torch_dataset = TensorDataset(torch.FloatTensor(dataReader.XTrain), torch.LongTensor(dataReader.YTrain.reshape(num_train,)))
     XVal, YVal = torch.FloatTensor(dataReader.XDev), torch.LongTensor(dataReader.YDev.reshape(num_val,))
     train_loader = DataLoader(  # data loader class
@@ -101,6 +113,12 @@ if __name__ == '__main__':
     plt.legend(["Train", "Val"])
     plt.show()
 
+    """
+    参见下面的链接，就是可以知道accuracy_score的作用了：
+    https://scikit-learn.org/stable/modules/model_evaluation.html#accuracy-score
+
+    不过我个人感觉，这个accuracy_score主要是用在classification里面了。
+    """
 
 
 

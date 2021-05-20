@@ -169,8 +169,9 @@ class NeuralNet_4_0(object):
         elif self.hp.net_type == NetType.BinaryClassifier:
             b = np.round(a)
             r = (b == y)
-            correct = r.sum()
-            return correct/m
+            correct = r.sum() 
+            return correct/m # PyTorch版sklearn.metrics.accuracy_score和此处的
+                             # 结果都是一样的，只不过accuracy_score直接是调用而已
         elif self.hp.net_type == NetType.MultipleClassifier:
             ra = np.argmax(a, axis=1)
             ry = np.argmax(y, axis=1)
