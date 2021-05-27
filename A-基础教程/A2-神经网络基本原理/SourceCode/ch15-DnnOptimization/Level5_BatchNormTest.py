@@ -185,6 +185,10 @@ def batchnorm_backward(dout, cache):
 
     return dx, dgamma, dbeta
 
+"""
+这部分的代码，仅仅是做了一次forward & backward，并且初始值input data是随便设置的，主要
+就是为了验证这个batch normalisation的正确性的。
+"""
 if __name__ == '__main__':
     batch_size = 64
     features=10
@@ -200,7 +204,7 @@ if __name__ == '__main__':
     out, cache = batchnorm_forward(x, gamma, beta, bn_param)
     dx,dgamma,dbeta = batchnorm_backward(delta_in, cache)
 
-    print("forward calculation is:", np.allclose(z, out))
+    print("forward calculation is:", np.allclose(z, out)) # Returns True if two arrays are element-wise equal within a tolerance
     print("backward calculate is:", np.allclose(dx, delta_out))
     print("derivative of gamma is:", np.allclose(d_gamma, dgamma))
     print("derivative of beta is:", np.allclose(d_beta, dbeta))
