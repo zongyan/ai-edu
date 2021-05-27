@@ -64,7 +64,7 @@ class AdaGrad(Optimizer):
         self.r = 0
 
     def update(self, theta, grad):
-        self.r = self.r + np.multiply(grad, grad)
+        self.r = self.r + np.multiply(grad, grad) # 就是element-wise的乘法了
         alpha = self.lr / (self.eps + np.sqrt(self.r))
         theta = theta - alpha * grad
         return theta
