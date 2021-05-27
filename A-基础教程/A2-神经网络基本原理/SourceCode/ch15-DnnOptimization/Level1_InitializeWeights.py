@@ -23,6 +23,11 @@ def net(init_method, activator):
     fc_count = len(num_hidden)-1
     layers = []
 
+    """
+    这一种方式就是有点类似于我现在写matlab代码的方式了，如果会看之前的tutorial代码，
+    就是可以明白有多少层hidden layer，就是会写多少次的了。这会儿就是变了，就是使用
+    一个for循环，大大节省了工作量了，也是简化的代码。
+    """
     for i in range(fc_count):
         fc = FcLayer_1_1(num_hidden[i], num_hidden[i+1], params)
         net.add_layer(fc, "fc")
@@ -40,6 +45,18 @@ def net(init_method, activator):
     # 激活函数输出值矩阵列表
     a_value = []
 
+    """
+    下面的两个for循环，就是给出怎么样子把这个每一层的结果输出保存下来，然后就是plot
+    出来的方式了。其实Section 15.1的第二个小问题就是可以按照这个方式做就可以了。
+    使用hist这个函数就是可以画出histgram，然后flatten的作用是把数据拉平的。
+    
+    这里就是有一点需要注意一下的了，这个就是对于这个output的尺寸，他是和样本数据，以
+    及每一层的neurons的数量有关系的。同时，需要注意的是，这个是没有训练的神经网络，
+    只是使用了不同的初始化方式，然后查看每一层的输出结果。
+    
+    不过Section 14.6的代码由于数据的问题，一直是没有办法运行起来的了。所以就暂时没有
+    上手实际操作的了。    
+    """
     # 依次做所有层的前向计算
     input = x
     for i in range(len(layers)):

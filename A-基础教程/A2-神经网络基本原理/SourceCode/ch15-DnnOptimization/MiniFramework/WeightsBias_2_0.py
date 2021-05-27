@@ -75,6 +75,15 @@ class WeightsBias_2_0(object):
         self.W = data["weights"]
         self.B = data["bias"]
 
+    """
+    这里就是给出了这个Section 5.1中各种不同的初始化方法了。 这里就是发生了一个非常
+    奇怪的现象，就是Section 5.1公式和这里的代码突然是不匹配的了。具体点说，在代码部分，
+    xavier使用的是uniform，而masa使用的是normal；但是在Section 5.1里面，uniform & 
+    normal的分布在两种不同的初始化方案里面都是出现。
+    
+    但是后来查阅资料之后，就是发现了，Section 5.1给出的公式是对的，然后代码的公式也是
+    正确的，可能就是Section 5.1中，多给了一些的公式了。
+    """
     @staticmethod
     def InitialParameters(num_input, num_output, method):
         if method == InitialMethod.Zero:
