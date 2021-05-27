@@ -9,8 +9,8 @@ from matplotlib.colors import LogNorm
 
 from MiniFramework.NeuralNet_4_1 import *
 
-train_file = "../../data/ch04.npz"
-test_file = "../../data/ch04.npz"
+train_file = "../../SourceCode/data/ch04.npz"
+test_file = "../../SourceCode/data/ch04.npz"
 
 class NeuralNet_4_2(NeuralNet_4_1):
     def Hook(self):
@@ -51,7 +51,8 @@ def ShowContour(net, dataReader):
     Loss2 = Loss1.sum(axis=0,keepdims=True)/m
     Loss3 = Loss2.reshape(len1, len2)
     plt.contour(W,B,Loss3,levels=np.logspace(-5, 5, 100), norm=LogNorm(), cmap=plt.cm.jet)
-
+    # contour是用来绘制等高线的, 同时， Section 15.4有一些的中文matplotlib的绘图解释
+    
     # show w,b trace
     plt.plot(w_history,b_history)
     plt.xlabel("w")
@@ -98,6 +99,6 @@ if __name__ == '__main__':
 
     for key in dict.keys():
         model(dict[key], key)
-        w_history.clear()
+        w_history.clear() # 用来清楚变量里的数值
         b_history.clear()
     
