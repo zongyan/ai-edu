@@ -15,7 +15,7 @@ class DropoutLayer(CLayer):
     def forward(self, input, train=True):
         assert(input.ndim == 2)
         if train:
-            self.mask = np.random.rand(*input.shape) > self.dropout_ratio
+            self.mask = np.random.rand(*input.shape) > self.dropout_ratio # 这段代码的解释，参见section 16.5 即可
             self.z = input * self.mask
         else:
             self.z = input * (1.0 - self.dropout_ratio)

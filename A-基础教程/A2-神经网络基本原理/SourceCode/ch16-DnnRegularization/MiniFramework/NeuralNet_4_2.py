@@ -54,7 +54,7 @@ class NeuralNet_4_2(object):
         return self.output
 
     def inference(self, X):
-        output = self.__forward(X, train=False)
+        output = self.__forward(X, train=False) # 这里的train是不能够设置为true的
         return output
 
     def __backward(self, X, Y):
@@ -136,7 +136,9 @@ class NeuralNet_4_2(object):
                 if self.hp.optimizer_name == OptimizerName.Nag:
                     self.__pre_update()
                 # get z from x,y
-                self.__forward(batch_x, train=True)
+                self.__forward(batch_x, train=True) # 如果是进入了dropout 
+                                                    # layer的话，这个train的作用就是enable mask的功能，
+                                                    # 然后接着这个dropout的功能就是可以起作用的了。
                 # calculate gradient of w and b
                 self.__backward(batch_x, batch_y)
                 # final update w,b
