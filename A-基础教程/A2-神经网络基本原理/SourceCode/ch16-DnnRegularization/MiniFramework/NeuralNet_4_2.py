@@ -122,8 +122,10 @@ class NeuralNet_4_2(object):
         if self.hp.batch_size == -1 or self.hp.batch_size > dataReader.num_train:
             self.hp.batch_size = dataReader.num_train
         # end if
-        max_iteration = math.ceil(dataReader.num_train / self.hp.batch_size)
-        checkpoint_iteration = (int)(max_iteration * checkpoint)
+        max_iteration = math.ceil(dataReader.num_train / self.hp.batch_size) 
+        # The Math.ceil() function always rounds a number up to the next largest integer.
+        
+        checkpoint_iteration = (int)(max_iteration * checkpoint) 
         need_stop = False
         for epoch in range(self.hp.max_epoch):
             dataReader.Shuffle()
@@ -140,7 +142,8 @@ class NeuralNet_4_2(object):
                 # final update w,b
                 self.__update()
                 
-                total_iteration = epoch * max_iteration + iteration               
+                total_iteration = epoch * max_iteration + iteration # 之所以可以使用小数的原因，还是因为使用的是total_interation
+                                                                    # 的方式就是，就是计算所有epoch的总共iteration才行
                 if (total_iteration+1) % checkpoint_iteration == 0:
                     #self.save_parameters()
                     need_stop = self.CheckErrorAndLoss(dataReader, batch_x, batch_y, epoch, total_iteration)

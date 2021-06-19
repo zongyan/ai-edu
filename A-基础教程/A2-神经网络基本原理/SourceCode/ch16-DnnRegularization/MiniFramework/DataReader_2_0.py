@@ -52,7 +52,9 @@ class DataReader_2_0(object):
             assert(self.XTrainRaw.shape[0] == self.YTrainRaw.shape[0])
             self.num_train = self.XTrainRaw.shape[0]
             self.num_feature = self.XTrainRaw.shape[1]
-            self.num_category = len(np.unique(self.YTrainRaw))
+            self.num_category = len(np.unique(self.YTrainRaw)) # finding the number of 
+                                                               # the unique elements of 
+                                                               # an array
             # this is for if no normalize requirment
             self.XTrain = self.XTrainRaw
             self.YTrain = self.YTrainRaw
@@ -114,7 +116,7 @@ class DataReader_2_0(object):
             self.YTrain = self.__ToZeroOne(self.YTrainRaw, base)
             self.YTest = self.__ToZeroOne(self.YTestRaw, base)
         elif nettype == NetType.MultipleClassifier:
-            self.YTrain = self.__ToOneHot(self.YTrainRaw, base)
+            self.YTrain = self.__ToOneHot(self.YTrainRaw, base) # 注意了，这一种toOneHot的归一化方式，是分类问题常用的手法
             self.YTest = self.__ToOneHot(self.YTestRaw, base)
 
     def __NormalizeY(self, raw_data):

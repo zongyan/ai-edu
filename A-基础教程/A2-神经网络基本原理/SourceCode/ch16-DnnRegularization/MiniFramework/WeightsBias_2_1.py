@@ -66,7 +66,11 @@ class WeightsBias_2_1(object):
         self.B = data["bias"]
 
     def SaveResultValue(self, folder, name):
-        file_name = str.format("{0}\\{1}.npz", folder, name)
+        file_name = str.format("{0}\\{1}.npz", folder, name) # 这个str.format真的是一个好东西
+                                                             # {0}, {1} 分别是代表folder, name
+                                                             # 两个不同的变量，这样子就是可以完整
+                                                             # 的组成一个path，然后这个\\的数量可以是
+                                                             # 一个，也可以是两个。
         np.savez(file_name, weights=self.W, bias=self.B)
         print("--------------")
         print("W=", self.W)

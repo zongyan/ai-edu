@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 from MiniFramework.NeuralNet_4_2 import *
 from MiniFramework.ActivatorLayer import *
 
-train_file = "../../Data/ch16.train.npz"
-test_file = "../../Data/ch16.test.npz"
+train_file = "../../SourceCode/Data/ch16.train.npz"
+test_file = "../../SourceCode/Data/ch16.test.npz"
 
 
 def Model(dataReader, num_input, num_hidden, num_output, params):
@@ -39,7 +39,10 @@ def Model(dataReader, num_input, num_hidden, num_output, params):
 
 def ShowResult(net, dr, title):
     TX = np.linspace(dr.XTrain.min(),dr.XTrain.max(),100).reshape(100,1)
-    TY = net.inference(TX)
+    TY = net.inference(TX) # 这里就是给出了plotting 拟合的曲线图的方式了，就是先是
+                           # 找出linespace一大堆的数据点，然后就是使用inference的
+                           # 的推理方式，就是可以得到一系列的数据点，plot出来就是
+                           # 可以的了。
     plt.plot(TX, TY, c='red')
     plt.title("fitting result")
     plt.scatter(dr.XTrain, dr.YTrain)

@@ -7,10 +7,10 @@ import numpy as np
 import struct
 from MiniFramework.DataReader_2_0 import *
 
-train_image_file = '../../Data/train-images-10'
-train_label_file = '../../Data/train-labels-10'
-test_image_file = '../../Data/test-images-10'
-test_label_file = '../../Data/test-labels-10'
+train_image_file = '../../SourceCode/Data/train-images-10'
+train_label_file = '../../SourceCode/Data/train-labels-10'
+test_image_file = '../../SourceCode/Data/test-images-10'
+test_label_file = '../../SourceCode/Data/test-labels-10'
 
 class MnistImageDataReader(DataReader_2_0):
     # mode: "image"=Nx1x28x28,  "vector"=1x784
@@ -63,9 +63,9 @@ class MnistImageDataReader(DataReader_2_0):
     def ReadImageFile(self, image_file_name):
         # header
         f = open(image_file_name, "rb")
-        a = f.read(4)
-        b = f.read(4)
-        num_images = int.from_bytes(b, byteorder='big')
+        a = f.read(4) # Return the 4 first characters of the file
+        b = f.read(4) # Return the 4 next characters of the file
+        num_images = int.from_bytes(b, byteorder='big') # Return the integer represented by the given array of bytes.
         c = f.read(4)
         num_rows = int.from_bytes(c, byteorder='big')
         d = f.read(4)
@@ -76,7 +76,7 @@ class MnistImageDataReader(DataReader_2_0):
         image_data = np.empty((num_images,1,num_rows,num_cols)) # N x 1 x 28 x 28
         for i in range(num_images):
             bin_data = f.read(image_size)   # read 784 byte data for one time
-            unpacked_data = struct.unpack(fmt, bin_data)
+            unpacked_data = struct.unpack(fmt, bin_data) # size 784, type tupe, 对这个fmt的格式不太明白。
             array_data = np.array(unpacked_data)
             array_data2 = array_data.reshape((1, num_rows, num_cols))
             image_data[i] = array_data2
@@ -94,7 +94,7 @@ class MnistImageDataReader(DataReader_2_0):
         label_data = np.zeros((num_labels,1))   # N x 1
         for i in range(num_labels):
             bin_data = f.read(1)
-            unpacked_data = struct.unpack(fmt, bin_data)[0]
+            unpacked_data = struct.unpack(fmt, bin_data)[0] # struct.unpack(fmt, bin_data) return (9,)
             label_data[i] = unpacked_data
         f.close()
         return label_data
