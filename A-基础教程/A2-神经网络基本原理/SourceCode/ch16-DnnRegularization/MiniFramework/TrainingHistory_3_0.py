@@ -34,10 +34,11 @@ class TrainingHistory_3_0(object):
         if accuracy_vld is not None:
             self.accuracy_val.append(accuracy_vld)
 
-        if stopper is not None:
+        if stopper is not None: # 我暂时也不清楚这一段代码的意义
             if stopper.stop_condition == StopCondition.StopDiff:
                 if len(self.loss_val) > 1:
-                    if abs(self.loss_val[-1] - self.loss_val[-2]) < stopper.stop_value:
+                    if abs(self.loss_val[-1] - self.loss_val[-2]) < stopper.stop_value: # 这里是第一次见用负数的形式来调用array中的element
+                                                                                        # 这个确实有很强的借鉴意义
                         self.counter = self.counter + 1
                         if self.counter > 3:
                             return True
@@ -46,7 +47,8 @@ class TrainingHistory_3_0(object):
                 #end if
             #end if
         #end if
-
+        
+        # 这部分的代码，就是earlystop的核心代码了。
         if self.early_stop:
             if loss_vld < self.last_vld_loss:
                 self.patience_counter = 0

@@ -144,7 +144,7 @@ class NeuralNet_4_2(object):
                 
                 total_iteration = epoch * max_iteration + iteration # 之所以可以使用小数的原因，还是因为使用的是total_interation
                                                                     # 的方式就是，就是计算所有epoch的总共iteration才行
-                if (total_iteration+1) % checkpoint_iteration == 0:
+                if (total_iteration+1) % checkpoint_iteration == 0: # 就算是early stop，还是以checkpoint的判断条件来做的
                     #self.save_parameters()
                     need_stop = self.CheckErrorAndLoss(dataReader, batch_x, batch_y, epoch, total_iteration)
                     if need_stop:

@@ -7,6 +7,6 @@ if __name__ == '__main__':
     dr = LoadData()
     hp, num_hidden = SetParameters()
     hp.regular_name = RegularMethod.EarlyStop
-    hp.regular_value = 8
+    hp.regular_value = 11
     net = Model(dr, 1, num_hidden, 1, hp)
     ShowResult(net, dr, hp.toString())
