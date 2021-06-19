@@ -7,7 +7,7 @@ if __name__ == '__main__':
     dr = LoadData()
     hp, num_hidden = SetParameters()
     hp.regular_name = RegularMethod.L2
-    hp.regular_value = 0.01
+    hp.regular_value = 0.02
     net = Model(dr, 1, num_hidden, 1, hp)
     ShowResult(net, dr, hp.toString())
 

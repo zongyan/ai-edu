@@ -76,7 +76,8 @@ class WeightsBias_2_1(object):
         print("W=", self.W)
         w_norm_1 = np.sum(abs(self.W))
         print("W_norm_1=", w_norm_1)
-        w_norm_2 = np.linalg.norm(self.W,2)
+        w_norm_2 = np.linalg.norm(self.W,2) # return the matrix or vector norm, 
+                                            # which supporting 8 different norms  
         print("W_norm_2=", w_norm_2)
 
     def LoadResultValue(self, folder, name):

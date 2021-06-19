@@ -163,7 +163,7 @@ class NeuralNet_4_2(object):
 
         self.save_parameters()
 
-        self.__check_weights_from_fc_layer()
+        self.__check_weights_from_fc_layer() # 这里做的是关于weights的统计
 
         if need_test:
             print("testing...")
