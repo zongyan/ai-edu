@@ -5,6 +5,7 @@ import numpy
 import numba
 import time
 
+from tqdm import tqdm
 from MiniFramework.ConvWeightsBias import *
 from MiniFramework.ConvLayer import *
 
@@ -81,7 +82,7 @@ if __name__ == '__main__':
     # dry run
     output1 = conv_4d(x, wb.W, wb.B, output_height, output_width, stride)
     s1 = time.time()
-    for i in range(10):
+    for i in tqdm(range(10)):
         output1 = conv_4d(x, wb.W, wb.B, output_height, output_width, stride)
     e1 = time.time()
     print("Time used for Python:", e1 - s1)
@@ -89,7 +90,7 @@ if __name__ == '__main__':
     # dry run
     output2 = jit_conv_4d(x, wb.W, wb.B, output_height, output_width, stride)
     s2 = time.time()
-    for i in range(10):
+    for i in tqdm(range(10)):
         output2 = jit_conv_4d(x, wb.W, wb.B, output_height, output_width, stride)
     e2 = time.time()
     print("Time used for Numba:", e2 - s2)
