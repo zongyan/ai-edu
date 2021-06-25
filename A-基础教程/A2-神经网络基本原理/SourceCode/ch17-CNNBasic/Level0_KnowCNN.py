@@ -21,19 +21,39 @@ def normalize(x, max_value=1):
     return x_n
 
 def try_filters(file_name):
-    img = cv2.imread(file_name)
+    img = cv2.imread(file_name) # loading an image: the decoded image has the 
+                                # channels stored in B G R order, 80 x 80 pixels
     # cv2 format is:G B R, change it to R G B
-    img1=img[:,:,[2,1,0]]
+    img1=img[:,:,[2,1,0]]    
+    """   
+    a1D = np.array([1, 2, 3, 4]) # 一维矩阵
+    print(a1D)
+    a2D = np.array([[1, 2], [3, 4]]) # 二维矩阵
+    print(a2D)
+    a3D = np.array([ [[1, 2], [3, 4]], [[5, 6], [7, 8]] ]) # 三维矩阵
+    print(a3D)
+    
+    a3D1=a3D[:,:,:] # 保持原样
+    print(a3D1)
+    a3D2=a3D[:,:,[0,1]] # 保持原样
+    print(a3D2)
+    a3D3=a3D[:,:,[1,0]] # 第三维度的第0列；第1列的数据调换    
+    print(a3D3) 
+    理解高纬度（比如上面的第三维度）的数据的时候，不能够只是通过这个代码中的中括号；
+    而是需要理解成Section 17.1的图17.16的样式（此时就是对列数据进行调换的时候，就
+    变得形象深度了）。
+    """
     #plt.imshow(img2)
     #plt.show()
-    img2 = cv2.cvtColor(img1, cv2.COLOR_RGB2GRAY)
+    img2 = cv2.cvtColor(img1, cv2.COLOR_RGB2GRAY) # convert from rgb to gray
+    # 从变量的维度来看，img2是二维，也就是说最后一维是控制rgb的，或者说是控制彩或灰色
     batch_size = 1
     input_channel = 1
-    (height, width) = img2.shape
-    FH = 3
-    FW = 3
+    (height, width) = img2.shape # 这一种赋值方式还是很好的
+    FH = 3 # kernal heigh
+    FW = 3 # kernal width
     print(img2.shape)
-    data = img2.reshape((1,1,height,width))
+    data = img2.reshape((1,1,height,width)) # 4-dimension array
     hp = HyperParameters_4_2(
         0.1, 10, batch_size,
         net_type=NetType.MultipleClassifier,
@@ -75,11 +95,14 @@ def try_filters(file_name):
 
     fig, ax = plt.subplots(nrows=3, ncols=3, figsize=(9,9))
     for i in range(len(filters)):
-        filter = np.repeat(filters[i], input_channel).reshape(batch_size, input_channel,FH,FW)
+        filter = np.repeat(filters[i], input_channel).reshape(batch_size, input_channel,FH,FW) 
+        # numpy.repreat在input_channel=1的时候没有任何意义（因为这个function里面
+        # 是单通道的数据），但是在input_channel > 1的时候，就是很有意义的了，因为此时
+        # 就是三通道了， see line 133
         conv.set_filter(filter, None)
         z = conv.forward(data)
         #z = normalize(z, 255)
-        ax[i//3, i%3].imshow(z[0,0])
+        ax[i//3, i%3].imshow(z[0,0]) # 从第一&二维度的位置0，0读取出一个数据
         ax[i//3, i%3].set_title(filters_name[i])
         ax[i//3, i%3].axis("off")
     plt.suptitle("filters")
@@ -93,7 +116,10 @@ def conv_relu_pool():
     (height, width, input_channel) = img.shape
     FH = 3
     FW = 3
-    data = np.transpose(img, axes=(2,1,0)).reshape((batch_size,input_channel,width,height))
+    data = np.transpose(img, axes=(2,1,0)).reshape((batch_size,input_channel,width,height)) 
+    # np.transpose(img, axes=(2,1,0))的作用，就是把img从(80, 80, 3)的维度变成
+    # (3, 80, 80)的尺度，这个尺度才是正常的维度；(80, 80, 3)是因为cv2.imread读取的
+    # 数据方向是反方向的。
     hp = HyperParameters_4_2(
         0.1, 10, batch_size,
         net_type=NetType.MultipleClassifier,
@@ -104,7 +130,7 @@ def conv_relu_pool():
     kernal = np.array([ -1,0,1,
                         -2,0,2,
                         -1,0,1])
-    filter = np.repeat(kernal, input_channel).reshape(batch_size, input_channel,FH,FW)
+    filter = np.repeat(kernal, input_channel).reshape(batch_size, input_channel,FH,FW) #
     conv.set_filter(filter, None)
     z1 = conv.forward(data)
     z2 = Relu().forward(z1)
@@ -113,10 +139,10 @@ def conv_relu_pool():
     z3 = pool.forward(z2)
 
     fig, ax = plt.subplots(nrows=2, ncols=2, figsize=(8,6))
-    ax[0,0].imshow(img[:,:,[2,1,0]])
+    ax[0,0].imshow(img[:,:,[2,1,0]]) # “显示格式”和“读取的格式”，以及“数据处理的格式”都不一样，注意区分
     ax[0,0].axis("off")
     ax[0,0].set_title("source:" + str(img.shape))
-    ax[0,1].imshow(z1[0,0].T)
+    ax[0,1].imshow(z1[0,0].T) # 
     ax[0,1].axis("off")
     ax[0,1].set_title("conv:" + str(z1.shape))
     ax[1,0].imshow(z2[0,0].T)

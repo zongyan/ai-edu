@@ -31,7 +31,7 @@ class ConvWeightsBias(WeightsBias_2_1):
         # end if
         self.CreateOptimizers()
 
-        self.dW = np.zeros(self.W.shape).astype('float32')
+        self.dW = np.zeros(self.W.shape).astype('float32') # changing to the float32
         self.dB = np.zeros(self.B.shape).astype('float32')
 
     def CreateNew(self):
