@@ -203,16 +203,22 @@ def img2col(input_data, filter_h, filter_w, stride=1, pad=0):
         #img[:,:,pad:pad+input_data.shape[2],pad:pad+input_data.shape[2]] = input_data[:,:]
         img = np.pad(input_data, [(0,0), (0,0), (pad, pad), (pad, pad)], 'constant')
         #img = np.pad(input_data,mode="constant",constant_value=0, pad_width=(0,0,0,0,pad,pad,pad,pad))
-    col = np.zeros((N, C, filter_h, filter_w, out_h, out_w))
+    col = np.zeros((N, C, filter_h, filter_w, out_h, out_w)) # 第一维：输出channel数；第二维：输入channel数
 
     for i in range(filter_h):
         i_max = i + stride*out_h
         for j in range(filter_w):
             j_max = j + stride*out_w
             col[:, :, i, j, :, :] = img[:, :, i:i_max:stride, j:j_max:stride]
+            # print(col[:, :, i, j, :, :]) # 第5和6维度是需要读取相应的2x2矩阵生成的
         #end for
     #end for
-    col = np.transpose(col, axes=(0, 4, 5, 1, 2, 3)).reshape(N*out_h*out_w, -1)
+    col = np.transpose(col, axes=(0, 4, 5, 1, 2, 3)).reshape(N*out_h*out_w, -1)  
+    # reshape中-1的作用就是变成2维array, 等价于.reshape(N*out_h*out_w, N*out_h*out_w)
+    # 但是我暂时还不清楚为什么用第一个方式，而不使用第二个方式
+    # 之所以把第4&5维度调到前面，是因为reshape的作用是转换成二维的array
+    # 后来在Level2_Img2Col_Test.py中的understand_4d_im2col也是看到了类似的代码
+    # 我推测他是从第二维开始根据N*out_h*out_w进行reshape；然后第一维的尺度就是和第二维一样
     return col
 
 

@@ -5,9 +5,37 @@ import numpy
 import numba
 import time
 
+from tqdm import tqdm
 from MiniFramework.ConvWeightsBias import *
 from MiniFramework.ConvLayer import *
 from MiniFramework.HyperParameters_4_2 import *
+
+def conv_4d(x, weights, bias, out_h, out_w, stride=1):
+    # 输入图片的批大小，通道数，高，宽
+    assert(x.ndim == 4)
+    # 输入图片的通道数
+    assert(x.shape[1] == weights.shape[1])  
+    batch_size = x.shape[0]
+    num_input_channel = x.shape[1]
+    num_output_channel = weights.shape[0]
+    filter_height = weights.shape[2]
+    filter_width = weights.shape[3]
+    rs = np.zeros((batch_size, num_output_channel, out_h, out_w))
+
+    for bs in range(batch_size):
+        for oc in range(num_output_channel):
+            rs[bs,oc] += bias[oc]
+            # xx = np.array([3,2,1,0]).reshape(1,1,2,2) # get a 4-D data: [[[[3 2] [1 0]]]]
+            # yy = xx[0,0,1] + xx[0,0,0] # sum in the 3-d dimension: [4 2]
+            for ic in range(num_input_channel):
+                for i in range(out_h):
+                    for j in range(out_w):
+                        ii = i * stride
+                        jj = j * stride
+                        for fh in range(filter_height):
+                            for fw in range(filter_width):
+                                rs[bs,oc,i,j] += x[bs,ic,fh+ii,fw+jj] * weights[oc,ic,fh,fw]
+    return rs
 
 def calculate_output_size(input_h, input_w, filter_h, filter_w, padding, stride=1):
     output_h = (input_h - filter_h + 2 * padding) // stride + 1    
@@ -27,14 +55,24 @@ def test_2d_conv():
     (output_height, output_width) = calculate_output_size(ih, iw, fh, fw, padding, stride)
     wb = ConvWeightsBias(output_channel, input_channel, fh, fw, InitialMethod.MSRA, OptimizerName.SGD, 0.1)
     wb.Initialize("test", "test", True)
-    wb.W = np.array([3,2,1,0]).reshape(1,1,2,2)
+    wb.W = np.array([3,2,1,0]).reshape(1,1,2,2) 
+    # D1: 1; D2: 1; D3: 2; D4: 2; 这个就是重新安排维度，即第一维是1个数据；第二维是
+    # 1个数据；第三维是2个数据，第四维是2个数据
     wb.B = np.array([0])
     x = np.array(range(9)).reshape(1,1,3,3)
+    # Solution 1 in Section 17.2
+    output0 = conv_4d(x, wb.W, wb.B, output_height, output_width, stride)
+    print("input=\n", x)
+    print("weights=\n", wb.W)
+    print("output=\n", output0)    
+    
+    # Solution 2 in Section 17.2
     output1 = jit_conv_4d(x, wb.W, wb.B, output_height, output_width, stride)
     print("input=\n", x)
     print("weights=\n", wb.W)
     print("output=\n", output1)
 
+    # Solution 3 in Section 17.2
     col = img2col(x, 2, 2, 1, 0)
     w = wb.W.reshape(4, 1)
     output2 = np.dot(col, w)
@@ -92,9 +130,12 @@ def understand_4d_im2col():
     print("output=\n", output)
     out2 = output.reshape(batch_size, output_height, output_width, -1)
     print("out2=\n", out2)
-    out3 = np.transpose(out2, axes=(0, 3, 1, 2))
+    out3 = np.transpose(out2, axes=(0, 3, 1, 2)) # 参见Section 17.2的Solution 3文字部分
     print("conv result=\n", out3)
-
+    """
+    reshape的作用就是重新配置array的维度，transpose的作用则是可以调换array特定维度
+    的数据    
+    """
 
 def test_performance():
     batch_size = 64
@@ -117,25 +158,25 @@ def test_performance():
     c1.initialize("test", "test", False)
 
     # dry run
-    for i in range(5):
+    for i in tqdm(range(5)):
         f1 = c1.forward_numba(x)
         delta_in = np.ones((f1.shape))
         #b1, dw1, db1 = c1.backward_numba(delta_in, 1)
     # run
     s1 = time.time()
-    for i in range(1000):
+    for i in tqdm(range(1000)):
         f1 = c1.forward_numba(x)
         #b1, dw1, db1 = c1.backward_numba(delta_in, 1)
     e1 = time.time()
     print("method numba:", e1-s1)
 
     # dry run
-    for i in range(5):
+    for i in tqdm(range(5)):
         f2 = c1.forward_img2col(x)
         #b2, dw2, db2 = c1.backward_col2img(delta_in, 1)
     # run
     s2 = time.time()
-    for i in range(1000):
+    for i in tqdm(range(1000)):
         f2 = c1.forward_img2col(x)
         #b2, dw2, db2 = c1.backward_col2img(delta_in, 1)
     e2 = time.time()
