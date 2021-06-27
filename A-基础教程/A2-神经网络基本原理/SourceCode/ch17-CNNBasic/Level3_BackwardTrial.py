@@ -27,8 +27,9 @@ def train(x, w, b, y):
         # loss
         t1 = (output - y)
         m = t1.shape[0]*t1.shape[1]
-        LOSS = np.multiply(t1, t1)
-        loss = np.sum(LOSS)/2/m
+        LOSS = np.multiply(t1, t1) # dimension: (78, 78)
+        loss = np.sum(LOSS)/2/m # line 30 & 31 是求loss的整个过程，按照均方差公式
+                                # 理解即可； 除以m的原因，是为了防止梯度爆炸
         print(i,loss)
         if loss < 1e-7:
             break
@@ -57,7 +58,7 @@ def create_sample_image():
     ax[1].imshow(y, cmap='gray')
     ax[1].set_title("target")
     plt.show()
-    return img_gray, w, y
+    return img_gray, w, y # 原来是可以同时返回多个变量值的
 
 def show_result(img_gray, w_true, w_result):
     fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(6,4))
@@ -72,7 +73,7 @@ def show_result(img_gray, w_true, w_result):
     plt.show()
 
 if __name__ == '__main__':
-    # 创建样本数据
+    # 创建样本数据，读取一张图片，转换成grey的形式（即单通道）
     x, w_true, y = create_sample_image()
     # 随机初始化卷积核
     w_init = np.random.normal(0, 0.1, w_true.shape)

@@ -28,12 +28,12 @@ if __name__ == '__main__':
     dataReader.ReadData()
     dataReader.GenerateValidationSet()
 
-    n_input, n_hidden, n_output = 1, 2, 1
+    n_input, n_hidden, n_output = 1, 2, 1 # 输入层，隐藏层，输出层的神经元个数 
     eta, batch_size, max_epoch = 0.05, 10, 5000
     eps = 0.001
 
     hp = HyperParameters_2_0(n_input, n_hidden, n_output, eta, max_epoch, batch_size, eps, NetType.Fitting, InitialMethod.Xavier)
-    net = NeuralNet_2_0(hp, "sin_121")
+    net = NeuralNet_2_0(hp, "sin_121") # 从forward & backword的代码来看，就是一个单层隐藏层的神经网络
 
     net.train(dataReader, 50, True)
     net.ShowTrainingHistory()
