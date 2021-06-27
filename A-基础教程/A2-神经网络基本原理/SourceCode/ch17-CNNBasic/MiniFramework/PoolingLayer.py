@@ -41,8 +41,8 @@ class PoolingLayer(CLayer):
         self.x = x
         N, C, H, W = x.shape
         col = img2col(x, self.pool_height, self.pool_width, self.stride, 0)
-        col_x = col.reshape(-1, self.pool_height * self.pool_width)
-        self.arg_max = np.argmax(col_x, axis=1)
+        col_x = col.reshape(-1, self.pool_height * self.pool_width) # reshape的代码需要专门研究一下
+        self.arg_max = np.argmax(col_x, axis=1) # Returns the indices of the maximum values along an axis.
         out1 = np.max(col_x, axis=1)
         out2 = out1.reshape(N, self.output_height, self.output_width, C)
         self.z = np.transpose(out2, axes=(0,3,1,2))
@@ -52,7 +52,9 @@ class PoolingLayer(CLayer):
         dout = np.transpose(delta_in, (0,2,3,1))
         dmax = np.zeros((dout.size, self.pool_size)).astype('float32')
         #dmax[np.arange(self.arg_max.size), np.flatten(self.arg_max)] = np.flatten(dout)
-        dmax[np.arange(self.arg_max.size), self.arg_max.flatten()] = dout.flatten()
+        # np.arange(self.arg_max.size)的作用是在0到self.arg_max.size，间隔1增加
+        # 然后左边方括号里面的作用，就是分别是每一个row找到最大值的位置
+        dmax[np.arange(self.arg_max.size), self.arg_max.flatten()] = dout.flatten() # Return a copy of the array collapsed into one dimension.
         dmax = dmax.reshape(dout.shape + (self.pool_size,))
         dcol = dmax.reshape(dmax.shape[0] * dmax.shape[1] * dmax.shape[2], -1)
         dx = col2img(dcol, self.x.shape, self.pool_height, self.pool_width, self.stride, 0, self.output_height, self.output_width)

@@ -18,7 +18,7 @@ def jit_maxpool_forward(x, batch_size, input_c, output_h, output_w, pool_h, pool
                     j_end = j_start + pool_w
                     target_array = x[b,c,i_start:i_end, j_start:j_end]
                     t = np.max(target_array)
-                    z[b,c,i,j] = t
+                    z[b,c,i,j] = t # 就是按照max pool的经典方式来编写代码的
 
     return z
 
@@ -34,6 +34,7 @@ def jit_maxpool_backward(x, delta_in, batch_size, input_c, output_h, output_w, p
                     j_start = j * pool_stride
                     j_end = j_start + pool_w
                     m,n = jit_get_max_index(x[b,c], i_start, i_end, j_start, j_end)
+                    # 通过调用一个函数，从原始的数据里面来判断最大的数值的index，从而来做反向传播
                     delta_out[b,c,m,n] = delta_in[b,c,i,j]
 
     return delta_out
@@ -210,7 +211,7 @@ def img2col(input_data, filter_h, filter_w, stride=1, pad=0):
         for j in range(filter_w):
             j_max = j + stride*out_w
             col[:, :, i, j, :, :] = img[:, :, i:i_max:stride, j:j_max:stride] # see line 212， 从i开始，到第i_max个数结束（此时index=1，包含i_max），步长stride
-            print(col[:, :, i, j, :, :]) # 第5和6维度是需要读取相应的2x2矩阵生成的
+            # print(col[:, :, i, j, :, :]) # 第5和6维度是需要读取相应的2x2矩阵生成的
         #end for
     #end for
     col = np.transpose(col, axes=(0, 4, 5, 1, 2, 3)).reshape(N*out_h*out_w, -1)  
@@ -232,7 +233,7 @@ def col2img(col, input_shape, filter_h, filter_w, stride, pad, out_h, out_w):
         for j in range(filter_w):
             j_max = j + stride*out_w
             img[:, :, i:i_max:stride, j:j_max:stride] += tmp2[:, :, i, j, :, :] # see line 212, inverse operation
-            print(img[:, :, i:i_max:stride, j:j_max:stride]) # 上面这一行代码和
+            # print(img[:, :, i:i_max:stride, j:j_max:stride]) # 上面这一行代码和
             # line212不同在于，继续做了元素叠加操作，其实这个也是可以理解的，因为初
             # 始化的时候，img的数值都是0；所以元素叠加操作就是变得可行了。
         #end for

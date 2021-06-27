@@ -5,6 +5,7 @@ import numpy
 import numba
 import time
 
+from tqdm import tqdm
 from MiniFramework.PoolingLayer import *
 
 
@@ -62,7 +63,7 @@ def test_performance():
     delta_in = np.random.random(f1.shape)
     # run
     s1 = time.time()
-    for i in range(5000):
+    for i in tqdm(range(5000)):
         f1 = p.forward_numba(x, True)
         b1 = p.backward_numba(delta_in, 0)
     e1 = time.time()
@@ -73,7 +74,7 @@ def test_performance():
     b2 = p.backward_col2img(delta_in, 1)
     # run
     s2 = time.time()
-    for i in range(5000):
+    for i in tqdm(range(5000)):
         f2 = p.forward_img2col(x, True)
         b2 = p.backward_col2img(delta_in, 1)
     e2 = time.time()
