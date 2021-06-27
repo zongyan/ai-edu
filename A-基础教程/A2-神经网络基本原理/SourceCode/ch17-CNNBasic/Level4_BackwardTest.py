@@ -5,6 +5,7 @@ import numpy
 import numba
 import time
 
+from tqdm import tqdm
 from MiniFramework.ConvWeightsBias import *
 from MiniFramework.ConvLayer import *
 from MiniFramework.HyperParameters_4_2 import *
@@ -35,25 +36,25 @@ def test_performance():
     c1.initialize("test", "test", False)
 
     # dry run
-    for i in range(5):
+    for i in tqdm(range(5)):
         f1 = c1.forward_numba(x)
         delta_in = np.ones((f1.shape))
         b1, dw1, db1 = c1.backward_numba(delta_in, 1)
     # run
     s1 = time.time()
-    for i in range(100):
+    for i in tqdm(range(100)):
         f1 = c1.forward_numba(x)
         b1, dw1, db1 = c1.backward_numba(delta_in, 1)
     e1 = time.time()
     print("method numba:", e1-s1)
 
     # dry run
-    for i in range(5):
+    for i in tqdm(range(5)):
         f2 = c1.forward_img2col(x)
         b2, dw2, db2 = c1.backward_col2img(delta_in, 1)
     # run
     s2 = time.time()
-    for i in range(100):
+    for i in tqdm(range(100)):
         f2 = c1.forward_img2col(x)
         b2, dw2, db2 = c1.backward_col2img(delta_in, 1)
     e2 = time.time()

@@ -41,12 +41,12 @@ def understand_4d_col2img_simple():
     delta_in = np.array(range(batch_size*output_channel*output_height*output_width)).reshape(batch_size, output_channel, output_height, output_width)
     print("delta_in=\n", delta_in)
 
-    delta_in_2d = np.transpose(delta_in, axes=(0,2,3,1)).reshape(-1, output_channel)
+    delta_in_2d = np.transpose(delta_in, axes=(0,2,3,1)).reshape(-1, output_channel) # 这个reshape的功能完全超出了我的想象，感觉太强大了。
     print("delta_in_2d=\n", delta_in_2d)
 
     dB = np.sum(delta_in_2d, axis=0, keepdims=True).T / batch_size
     print("dB=\n", dB)
-    dW = np.dot(col_x.T, delta_in_2d) / batch_size
+    dW = np.dot(col_x.T, delta_in_2d) / batch_size # ToDo: 注意一下这一行代码在复杂情况下
     print("dW=\n", dW)
     dW = np.transpose(dW, axes=(1, 0)).reshape(output_channel, input_channel, fh, fw)
     print("dW=\n", dW)
@@ -88,7 +88,7 @@ def understand_4d_col2img_complex():
 
     dB = np.sum(delta_in_2d, axis=0, keepdims=True).T / batch_size
     print("dB=\n", dB)
-    dW = np.dot(col_x.T, delta_in_2d) / batch_size
+    dW = np.dot(col_x.T, delta_in_2d) / batch_size # 回应line 49，还是有区别的， 但是为什么需要转置，暂时没有想明白
     print("dW=\n", dW)
     dW = np.transpose(dW, axes=(1, 0)).reshape(output_channel, input_channel, fh, fw)
     print("dW=\n", dW)

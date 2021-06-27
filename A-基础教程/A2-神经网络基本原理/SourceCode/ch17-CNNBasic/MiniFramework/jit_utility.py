@@ -204,13 +204,13 @@ def img2col(input_data, filter_h, filter_w, stride=1, pad=0):
         img = np.pad(input_data, [(0,0), (0,0), (pad, pad), (pad, pad)], 'constant')
         #img = np.pad(input_data,mode="constant",constant_value=0, pad_width=(0,0,0,0,pad,pad,pad,pad))
     col = np.zeros((N, C, filter_h, filter_w, out_h, out_w)) # 第一维：输出channel数；第二维：输入channel数
-
+    # 在line 212，是从第三维，第四维开始对齐的，第一维，第二维没有做任何的修改，保持原样。
     for i in range(filter_h):
         i_max = i + stride*out_h
         for j in range(filter_w):
             j_max = j + stride*out_w
-            col[:, :, i, j, :, :] = img[:, :, i:i_max:stride, j:j_max:stride]
-            # print(col[:, :, i, j, :, :]) # 第5和6维度是需要读取相应的2x2矩阵生成的
+            col[:, :, i, j, :, :] = img[:, :, i:i_max:stride, j:j_max:stride] # see line 212， 从i开始，到第i_max个数结束（此时index=1，包含i_max），步长stride
+            print(col[:, :, i, j, :, :]) # 第5和6维度是需要读取相应的2x2矩阵生成的
         #end for
     #end for
     col = np.transpose(col, axes=(0, 4, 5, 1, 2, 3)).reshape(N*out_h*out_w, -1)  
@@ -225,13 +225,16 @@ def img2col(input_data, filter_h, filter_w, stride=1, pad=0):
 def col2img(col, input_shape, filter_h, filter_w, stride, pad, out_h, out_w):
     N, C, H, W = input_shape
     tmp1 = col.reshape(N, out_h, out_w, C, filter_h, filter_w)
-    tmp2 = np.transpose(tmp1, axes=(0, 3, 4, 5, 1, 2))
+    tmp2 = np.transpose(tmp1, axes=(0, 3, 4, 5, 1, 2)) # see line 216，inverse operation
     img = np.zeros((N, C, H + 2*pad + stride - 1, W + 2*pad + stride - 1))
     for i in range(filter_h):
         i_max = i + stride*out_h
         for j in range(filter_w):
             j_max = j + stride*out_w
-            img[:, :, i:i_max:stride, j:j_max:stride] += tmp2[:, :, i, j, :, :]
+            img[:, :, i:i_max:stride, j:j_max:stride] += tmp2[:, :, i, j, :, :] # see line 212, inverse operation
+            print(img[:, :, i:i_max:stride, j:j_max:stride]) # 上面这一行代码和
+            # line212不同在于，继续做了元素叠加操作，其实这个也是可以理解的，因为初
+            # 始化的时候，img的数值都是0；所以元素叠加操作就是变得可行了。
         #end for
     #end for
     return img[:, :, pad:H + pad, pad:W + pad]
