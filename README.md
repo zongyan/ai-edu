@@ -1,3 +1,5 @@
+This branch explores the principle of Neural Networks (e.g. DNN, CNN, and RNN).
+
 # <font size=5>微软人工智能教育与学习共建社区</font>
 本社区是微软亚洲研究院（Microsoft Research Asia，简称MSRA）人工智能教育团队创立的人工智能教育与学习共建社区.
 

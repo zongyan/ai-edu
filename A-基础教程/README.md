@@ -1,5 +1,3 @@
-This branch explores the principle of Neural Networks (e.g. DNN, CNN, and RNN).
-
 # A-基础教程
 
 此模块是人工智能学习的理论教程集合，包括课程详解和代码示例，帮助学习者从入门到精通神经网络的原理，并通过一系列代码实践讲原理应用于实际问题的解决。
