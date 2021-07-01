@@ -26,7 +26,7 @@ def conv_4d(x, weights, bias, out_h, out_w, stride=1):
         for oc in range(num_output_channel):
             rs[bs,oc] += bias[oc]
             # xx = np.array([3,2,1,0]).reshape(1,1,2,2) # get a 4-D data: [[[[3 2] [1 0]]]]
-            # yy = xx[0,0,1] + xx[0,0,0] # sum in the 3-d dimension: [4 2]
+            # yy = xx[0,0,1] + xx[0,0,0] # sum in the 3-d dimension: [4 2], xx[0,0,1]直接读取相应维度的数据，又是因为xx本身是思维的，所以读取出来就是变成了一维的
             for ic in range(num_input_channel):
                 for i in range(out_h):
                     for j in range(out_w):

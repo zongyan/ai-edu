@@ -11,7 +11,7 @@ from MiniFramework.ConvLayer import *
 
 def conv_4d(x, weights, bias, out_h, out_w, stride=1):
     # 输入图片的批大小，通道数，高，宽
-    assert(x.ndim == 4)
+    assert(x.ndim == 4) # ndim返回变量的维度
     # 输入图片的通道数
     assert(x.shape[1] == weights.shape[1])  
     batch_size = x.shape[0]
@@ -24,7 +24,7 @@ def conv_4d(x, weights, bias, out_h, out_w, stride=1):
     for bs in range(batch_size):
         for oc in range(num_output_channel):
             rs[bs,oc] += bias[oc]
-            for ic in range(num_input_channel):
+            for ic in range(num_input_channel): # 这一行就是完成了多个input channels的求和工作
                 for i in range(out_h):
                     for j in range(out_w):
                         ii = i * stride
