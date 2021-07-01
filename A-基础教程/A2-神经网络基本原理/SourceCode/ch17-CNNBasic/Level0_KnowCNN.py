@@ -49,7 +49,7 @@ def try_filters(file_name):
     # 从变量的维度来看，img2是二维，也就是说最后一维是控制rgb的，或者说是控制彩或灰色
     batch_size = 1
     input_channel = 1
-    (height, width) = img2.shape # 这一种赋值方式还是很好的
+    (height, width) = img2.shape # 这一种赋值方式还是很好的， cv2.cvtColor只是把第三维度给简化了，维度还是和img一样的（高度x宽度）
     FH = 3 # kernal heigh
     FW = 3 # kernal width
     print(img2.shape)
@@ -130,7 +130,7 @@ def conv_relu_pool():
     kernal = np.array([ -1,0,1,
                         -2,0,2,
                         -1,0,1])
-    filter = np.repeat(kernal, input_channel).reshape(batch_size, input_channel,FH,FW) #
+    filter = np.repeat(kernal, input_channel).reshape(batch_size, input_channel,FH,FW) # 每一个kernal中的元素都是会被重复input_channel的次数
     conv.set_filter(filter, None)
     z1 = conv.forward(data)
     z2 = Relu().forward(z1)
