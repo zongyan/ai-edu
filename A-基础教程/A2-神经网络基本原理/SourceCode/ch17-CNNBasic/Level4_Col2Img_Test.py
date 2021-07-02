@@ -46,11 +46,11 @@ def understand_4d_col2img_simple():
 
     dB = np.sum(delta_in_2d, axis=0, keepdims=True).T / batch_size
     print("dB=\n", dB)
-    dW = np.dot(col_x.T, delta_in_2d) / batch_size # ToDo: 注意一下这一行代码在复杂情况下
+    dW = np.dot(col_x.T, delta_in_2d) / batch_size # 转置的原因就是按照全连接的思路来理解
     print("dW=\n", dW)
     dW = np.transpose(dW, axes=(1, 0)).reshape(output_channel, input_channel, fh, fw)
     print("dW=\n", dW)
-    dcol = np.dot(delta_in_2d, col_w.T)
+    dcol = np.dot(delta_in_2d, col_w.T) # 转置的原因就是按照全连接的思路来理解
     print("dcol=\n", dcol)
     delta_out = col2img(dcol, x.shape, fh, fw, stride, padding, output_height, output_width)
     print("delta_out=\n", delta_out)
@@ -88,7 +88,7 @@ def understand_4d_col2img_complex():
 
     dB = np.sum(delta_in_2d, axis=0, keepdims=True).T / batch_size
     print("dB=\n", dB)
-    dW = np.dot(col_x.T, delta_in_2d) / batch_size # 回应line 49，还是有区别的， 但是为什么需要转置，暂时没有想明白
+    dW = np.dot(col_x.T, delta_in_2d) / batch_size # 回应line 49， 参见Section 17.4， 9.4 & 5.2 即可
     print("dW=\n", dW)
     dW = np.transpose(dW, axes=(1, 0)).reshape(output_channel, input_channel, fh, fw)
     print("dW=\n", dW)
