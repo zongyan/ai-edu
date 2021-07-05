@@ -12,8 +12,8 @@ from ExtendedDataReader.GeometryDataReader import *
     先用SourceCode/Data/ch18_color.py来生成训练数据集
 """
 
-train_data_name = "../../data/ch18.train_color.npz"
-test_data_name = "../../data/ch18.test_color.npz"
+train_data_name = "../../SourceCode/data/ch18.train_color.npz"
+test_data_name = "../../SourceCode/data/ch18.test_color.npz"
 
 name = ["red","green","blue","yellow","cyan","pink"]
 
@@ -40,20 +40,20 @@ def cnn_model():
 
     net = NeuralNet_4_2(params, "color_cnn")
     
-    c1 = ConvLayer((3,28,28), (2,1,1), (1,0), params)
+    c1 = ConvLayer((3,28,28), (20,1,1), (1,0), params)
     net.add_layer(c1, "c1")
     r1 = ActivationLayer(Relu())
     net.add_layer(r1, "relu1")
     p1 = PoolingLayer(c1.output_shape, (2,2), 2, PoolingTypes.MAX)
     net.add_layer(p1, "p1") 
-    """
-    c2 = ConvLayer(p1.output_shape, (3,3,3), (1,0), params)
-    net.add_layer(c2, "c2")
-    r2 = ActivationLayer(Relu())
-    net.add_layer(r2, "relu2")
-    p2 = PoolingLayer(c2.output_shape, (2,2), 2, PoolingTypes.MAX)
-    net.add_layer(p2, "p2") 
-    """
+    
+    # c2 = ConvLayer(p1.output_shape, (3,3,3), (1,0), params)
+    # net.add_layer(c2, "c2")
+    # r2 = ActivationLayer(Relu())
+    # net.add_layer(r2, "relu2")
+    # p2 = PoolingLayer(c2.output_shape, (2,2), 2, PoolingTypes.MAX)
+    # net.add_layer(p2, "p2") 
+    
     params.learning_rate = 0.1
 
     #f3 = FcLayer_2_0(p2.output_size, 32, params)

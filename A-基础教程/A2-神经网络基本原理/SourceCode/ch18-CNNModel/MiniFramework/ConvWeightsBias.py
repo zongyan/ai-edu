@@ -55,7 +55,7 @@ class ConvWeightsBias(WeightsBias_2_1):
         self.dB = self.dB / m
 
     @staticmethod
-    def InitialConvParameters(shape, method):
+    def InitialConvParameters(shape, method): # 卷积层的weight &bias的初始化方式，其实和FFNN是一样的
         assert(len(shape) == 4)
         num_input = shape[2]
         num_output = shape[3]

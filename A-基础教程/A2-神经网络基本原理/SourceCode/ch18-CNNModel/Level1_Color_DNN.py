@@ -12,16 +12,16 @@ from ExtendedDataReader.GeometryDataReader import *
     先用SourceCode/Data/ch18_color.py来生成训练数据集
 """
 
-train_data_name = "../../data/ch18.train_color.npz"
-test_data_name = "../../data/ch18.test_color.npz"
+train_data_name = "../../SourceCode/data/ch18.train_color.npz"
+test_data_name = "../../SourceCode/data/ch18.test_color.npz"
 
 name = ["red","green","blue","yellow","cyan","pink"]
 
 def LoadData(mode):
     print("reading data...")
     dr = GeometryDataReader(train_data_name, test_data_name, mode)
-    dr.ReadData()
-    dr.NormalizeX()
+    dr.ReadData()    
+    dr.NormalizeX() # 仅仅是需要对x的数值进行归一化&修改维度；y因为是label，所以就是不需要归一化，仅需要修改维度
     dr.NormalizeY(NetType.MultipleClassifier, base=0)
     dr.Shuffle()
     dr.GenerateValidationSet(k=10)
@@ -40,7 +40,7 @@ def dnn_model():
 
     net = NeuralNet_4_2(params, "color_dnn")
     
-    f1 = FcLayer_2_0(784, 128, params)
+    f1 = FcLayer_2_0((784*3), 128, params)
     net.add_layer(f1, "f1")
     r1 = ActivationLayer(Relu())
     net.add_layer(r1, "relu1")

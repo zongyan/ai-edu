@@ -5,6 +5,8 @@ import time
 import os
 import math
 
+from tqdm import tqdm
+
 from MiniFramework.EnumDef_6_0 import *
 from MiniFramework.Layer import *
 from MiniFramework.FCLayer_2_0 import *
@@ -127,7 +129,7 @@ class NeuralNet_4_2(object):
         max_iteration = math.ceil(dataReader.num_train / self.hp.batch_size)
         checkpoint_iteration = (int)(math.ceil(max_iteration * checkpoint))
         need_stop = False
-        for epoch in range(self.hp.max_epoch):
+        for epoch in (range(self.hp.max_epoch)):
             dataReader.Shuffle()
             for iteration in range(max_iteration):
                 # get x and y value for one sample
