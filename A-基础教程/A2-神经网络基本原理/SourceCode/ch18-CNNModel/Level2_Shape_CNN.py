@@ -12,8 +12,8 @@ from ExtendedDataReader.GeometryDataReader import *
     先用SourceCode/Data/ch18_shape.py来生成训练数据集
 """
 
-train_data_name = "../../data/ch18.train_shape.npz"
-test_data_name = "../../data/ch18.test_shape.npz"
+train_data_name = "../../SourceCode/data/ch18.train_shape.npz"
+test_data_name = "../../SourceCode/data/ch18.test_shape.npz"
 
 name = ["circle","rectangle","triangle","diamond","line"]
 
@@ -40,7 +40,7 @@ def cnn_model():
 
     net = NeuralNet_4_2(params, "shape_cnn")
     
-    c1 = ConvLayer((1,28,28), (8,3,3), (1,1), params)
+    c1 = ConvLayer((1,28,28), (8,5,5), (1,1), params)
     net.add_layer(c1, "c1")
     r1 = ActivationLayer(Relu())
     net.add_layer(r1, "relu1")

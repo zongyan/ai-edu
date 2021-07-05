@@ -10,6 +10,11 @@ from Level2_Shape_CNN import *
 name = ["rect","tri","circle","diamond","line"]
 pos=[0,1,3,6,12]
 
+"""
+之所以level 1的visualize代码没有办法运行起来，是因为CNN是一层，而这个ｖｉｓｕａｌｉｚｅ的代码
+是要求ｃｎｎ是两层了，所以只需要把ｌｅｖｅｌ　１　ｃｎｎ的代码中的相关第二层卷积层的代码恢复即可。
+"""
+
 def visualize_filter_and_layer_2(net):
     fig, ax = plt.subplots(nrows=6, ncols=16, figsize=(12,9))
     N = 16
