@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
-import torchvision
+import torchvision # 因为现有的环境下没有办法导入torchvision，所以此代码暂时就先搁置
 import torchvision.transforms as transforms
 
 from tqdm import tqdm as pbar
