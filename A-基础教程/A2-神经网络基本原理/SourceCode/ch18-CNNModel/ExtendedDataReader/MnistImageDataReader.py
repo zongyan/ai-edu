@@ -52,6 +52,7 @@ class MnistImageDataReader(DataReader_2_0):
 
     # output array: num_images * channel * 28 * 28
     # due to gray image instead of color, so channel = 1
+    # 这部分的代码逻辑还是非常的重要的，以后可能就是会用到的了。
     def ReadImageFile(self, image_file_name):
         # header
         f = open(image_file_name, "rb")
