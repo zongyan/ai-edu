@@ -10,12 +10,12 @@ from MiniFramework.ActivationLayer import *
 from MiniFramework.LossFunction_1_1 import *
 from MiniFramework.TrainingHistory_3_0 import *
 
-train_file = "../../data/ch19.train_echo.npz"
-test_file = "../../data/ch19.test_echo.npz"
+train_file = "../../SourceCode/data/ch19.train_echo.npz"
+test_file = "../../SourceCode/data/ch19.test_echo.npz"
 
 def load_data():
     dr = DataReader_2_0(train_file, test_file)
-    dr.ReadData()
+    dr.ReadData() #  train_data: 200x2x1; train_label: 200x2
     dr.GenerateValidationSet(k=10)
     return dr
 
@@ -33,7 +33,7 @@ class timestep_1(object):
         self.h = np.dot(self.x, U) + bh
         # 公式2
         self.s = Tanh().forward(self.h)
-        self.z = 0
+        self.z = 0 # 根据图19-8，是可以知道t1是没有任何的输出的
 
     def backward(self, y, dh_t2):
         # 公式14
@@ -74,7 +74,7 @@ class timestep_2(object):
         # 公式12
         self.dU = np.dot(self.x.T, self.dh)
         # 公式13
-        self.dW = np.dot(s_t1.T, self.dh)
+        self.dW = np.dot(s_t1.T, self.dh) # 这个dW是针对t2的梯度计算
 
 
 class net(object):
@@ -108,16 +108,16 @@ class net(object):
             for iteration in range(max_iteration):
                 # get data
                 batch_x, batch_y = self.dr.GetBatchTrainSamples(1, iteration)
-                xt1 = batch_x[:,0,:]
-                xt2 = batch_x[:,1,:]
-                yt1 = batch_y[:,0]
-                yt2 = batch_y[:,1]
+                xt1 = batch_x[:,0,:] # 标量 
+                xt2 = batch_x[:,1,:] # 标量 
+                yt1 = batch_y[:,0] # 标量
+                yt2 = batch_y[:,1] # 标量
                 # forward
                 self.t1.forward(xt1,self.U,self.V,self.W,self.bh)
                 self.t2.forward(xt2,self.U,self.V,self.W,self.bh,self.bz,self.t1.s)
                 # backward
                 self.t2.backward(yt2, self.t1.s)
-                self.t1.backward(yt1, self.t2.dh)
+                self.t1.backward(yt1, self.t2.dh) # 虽然yt1输入到函数里面，但是在函数里面并没有用到
                 # update
                 self.U = self.U - (self.t1.dU + self.t2.dU)*eta
                 self.V = self.V - (self.t1.dV + self.t2.dV)*eta
