@@ -40,16 +40,16 @@ def dedup(names):
     return list(dict.keys())
 
 def generate_file():
-    files = findFiles('../../data/names/*.txt')
+    files = findFiles('../../SourceCode/data/names/*.txt')
     category = len(files)
-    file = open("../../data/ch19.name_language.txt", mode='w')
+    file = open("../../SourceCode/data/ch19.name_language.txt", mode='w')
 
     index = 0
     X = None
     Y = None
     def_len = 20
     max_len = 0
-    for filename in findFiles('../../data/names/*.txt'):
+    for filename in findFiles('../../SourceCode/data/names/*.txt'):
         language = os.path.splitext(os.path.basename(filename))[0]
         language_index.append(language)
         names = readLines(filename)

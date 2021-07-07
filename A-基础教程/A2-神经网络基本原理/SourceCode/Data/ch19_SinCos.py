@@ -20,7 +20,7 @@ if __name__=='__main__':
     x,y = get_One_train_data()
     print(x)
     print(y)
-    exit()
+    # exit()
 
     steps = np.linspace(0, np.pi*2, 100)
     x = np.sin(steps)
