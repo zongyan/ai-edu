@@ -20,6 +20,7 @@ def load_data():
     return dr
 
 def show(x1, y1, x2, y2, x_label, y_label):
+    fig = plt.figure(figsize=(6,6)) # fixed the plotting bug
     plt.plot(x1, y1, 'r-x', label=x_label)
     plt.plot(x2, y2, 'b-o', label=y_label)
     plt.legend()
@@ -96,7 +97,7 @@ class net(object):
         num_input = 1
         num_hidden = 1
         num_output = 1
-        max_epoch = 100
+        max_epoch = 200
         eta = 0.1
         self.U = np.random.normal(size=(num_input,num_hidden))
         self.W = np.random.normal(size=(num_hidden,num_hidden))
@@ -122,8 +123,10 @@ class net(object):
                 self.U = self.U - (self.t1.dU + self.t2.dU)*eta
                 self.V = self.V - (self.t1.dV + self.t2.dV)*eta
                 self.W = self.W - (self.t1.dW + self.t2.dW)*eta
-                self.bh = self.bh - (self.t1.dbh + self.t2.dbh)*eta
-                self.bz = self.bz - (self.t1.dbz + self.t2.dbz)*eta
+                # self.bh = self.bh - (self.t1.dbh + self.t2.dbh)*eta
+                # self.bz = self.bz - (self.t1.dbz + self.t2.dbz)*eta
+                self.bh = 0
+                self.bz = 0                
             #end for
             total_iteration = epoch * max_iteration + iteration
             if (epoch % 1 == 0):
