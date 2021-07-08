@@ -12,8 +12,8 @@ from MiniFramework.ClassificationLayer import *
 from MiniFramework.LossFunction_1_1 import *
 from MiniFramework.TrainingHistory_3_0 import *
 
-train_file = "../../data/ch19.train_minus.npz"
-test_file = "../../data/ch19.test_minus.npz"
+train_file = "../../SourceCode/data/ch19.train_minus.npz"
+test_file = "../../SourceCode/data/ch19.test_minus.npz"
 
 def load_data():
     dr = DataReader_2_0(train_file, test_file)
@@ -23,17 +23,20 @@ def load_data():
     return dr
 
 class timestep(object):
-    def forward(self,x,U,V,W,prev_s):
+    def forward(self,x,U,V,W,bh,bz,prev_s):
         self.U = U
         self.V = V
         self.W = W
+        self.bh = bh
+        self.bz = bz        
         self.x = x
         # 公式6
-        self.h = np.dot(x, U) + np.dot(prev_s, W)
+        self.h = np.dot(x, U) + np.dot(prev_s, W) + self.bh
         # 公式2
         self.s = Tanh().forward(self.h)
+        # self.s = Sigmoid().forward(self.h)        
         # 公式3
-        self.z = np.dot(self.s, V)
+        self.z = np.dot(self.s, V) + self.bz
         # 公式4
         self.a = Logistic().forward(self.z)
 
@@ -41,27 +44,33 @@ class timestep(object):
         # 公式7
         self.dz = (self.a - y)
         # 公式11
-        self.dh = (np.dot(self.dz, self.V.T) + np.dot(next_dh, self.W.T)) * Tanh().backward(self.s)
+        self.dh = (np.dot(self.dz, self.V.T) + np.dot(next_dh, self.W.T)) * Tanh().backward(self.s) # 使用next的dh
+        # self.dh = (np.dot(self.dz, self.V.T) + np.dot(next_dh, self.W.T)) * Sigmoid().backward(self.s) # 使用next的dh        
         # 公式12
         self.dV = np.dot(self.s.T, self.dz)
         # 公式13
         self.dU = np.dot(self.x.T, self.dh)
         # 公式15
-        self.dW = np.dot(prev_s.T, self.dh)
+        self.dW = np.dot(prev_s.T, self.dh) # 使用previous的s
+        self.dbz = self.dz
+        self.dbh = self.dh               
 
 class timestep_1(timestep):
     # compare with timestep class: no h_t value from previous layer
-    def forward(self,x,U,V,W):
+    def forward(self,x,U,V,W,bh,bz):
         self.U = U
         self.V = V
         self.W = W
+        self.bh = bh
+        self.bz = bz                
         self.x = x
         # 公式1
-        self.h = np.dot(self.x, U)
+        self.h = np.dot(self.x, U) + self.bh
         # 公式2
         self.s = Tanh().forward(self.h)
+        # self.s = Sigmoid().forward(self.h)        
         # 公式3
-        self.z = np.dot(self.s, V)
+        self.z = np.dot(self.s, V) + self.bz
         # 公式4
         self.a = Logistic().forward(self.z)
 
@@ -71,26 +80,32 @@ class timestep_1(timestep):
         self.dz = (self.a - y)
         # 公式11
         self.dh = (np.dot(self.dz, self.V.T) + np.dot(next_dh, self.W.T)) * Tanh().backward(self.s)
+        # self.dh = (np.dot(self.dz, self.V.T) + np.dot(next_dh, self.W.T)) * Sigmoid().backward(self.s)        
         # 公式12
         self.dV = np.dot(self.s.T, self.dz)
         # 公式13
         self.dU = np.dot(self.x.T, self.dh)
         # 公式14
         self.dW = 0
+        self.dbz = self.dz
+        self.dbh = self.dh                       
 
 class timestep_4(timestep):
-    # compare with timestep class: no next_dh from future layer
+    # compare with timestep class: no next_dh from future layer 这里的loss是t4的loss
     def backward(self, y, prev_s):
         # 公式7
         self.dz = self.a - y
         # 公式9
         self.dh = np.dot(self.dz, self.V.T) * Tanh().backward(self.s)
+        # self.dh = np.dot(self.dz, self.V.T) * Sigmoid().backward(self.s)        
         # 公式12
         self.dV = np.dot(self.s.T, self.dz)
         # 公式13
         self.dU = np.dot(self.x.T, self.dh)
         # 公式15
         self.dW = np.dot(prev_s.T, self.dh)
+        self.dbz = self.dz
+        self.dbh = self.dh                       
 
 class net(object):
     def __init__(self, dr):
@@ -103,10 +118,10 @@ class net(object):
         self.t4 = timestep_4()
 
     def forward(self,X):
-        self.t1.forward(X[:,0],self.U,self.V,self.W)
-        self.t2.forward(X[:,1],self.U,self.V,self.W,self.t1.s)
-        self.t3.forward(X[:,2],self.U,self.V,self.W,self.t2.s)
-        self.t4.forward(X[:,3],self.U,self.V,self.W,self.t3.s)
+        self.t1.forward(X[:,0],self.U,self.V,self.W,self.bh,self.bz)
+        self.t2.forward(X[:,1],self.U,self.V,self.W,self.bh,self.bz,self.t1.s)
+        self.t3.forward(X[:,2],self.U,self.V,self.W,self.bh,self.bz,self.t2.s)
+        self.t4.forward(X[:,3],self.U,self.V,self.W,self.bh,self.bz,self.t3.s)
 
     def backward(self,Y):
         self.t4.backward(Y[:,3], self.t3.s)
@@ -118,6 +133,10 @@ class net(object):
         self.U = self.U - (self.t1.dU + self.t2.dU + self.t3.dU + self.t4.dU)*eta
         self.V = self.V - (self.t1.dV + self.t2.dV + self.t3.dV + self.t4.dV)*eta
         self.W = self.W - (self.t1.dW + self.t2.dW + self.t3.dW + self.t4.dW)*eta
+        # self.bh = self.bh - (self.t1.dbh + self.t2.dbh + self.t3.dbh + self.t4.dbh)*eta
+        # self.bz = self.bz - (self.t1.dbz + self.t2.dbz + self.t3.dbz + self.t4.dbz)*eta    
+        self.bh = 0
+        self.bz = 0            
 
     def check_loss(self,X,Y):
         self.forward(X)
@@ -139,13 +158,15 @@ class net(object):
 
     def train(self, batch_size, checkpoint=0.1):
         num_input = 2
-        num_hidden = 4
+        num_hidden = 2
         num_output = 1
-        max_epoch = 100
+        max_epoch = 500
         eta = 0.1
         self.U = np.random.normal(size=(num_input, num_hidden))
         self.W = np.random.normal(size=(num_hidden,num_hidden))
         self.V = np.random.normal(size=(num_hidden,num_output))
+        self.bh = np.zeros((1,num_hidden)) # 1 x #_of_Neurons 
+        self.bz = np.zeros((1,num_output)) # 1 x #_of_Neurons
         max_iteration = math.ceil(self.dr.num_train/batch_size)
         checkpoint_iteration = (int)(math.ceil(max_iteration * checkpoint))
         for epoch in range(max_epoch):
@@ -192,6 +213,12 @@ class net(object):
             print("pred:", reverse(result[idx]))
             print("====================")
         #end for
+        
+        print("U:", self.U)
+        print("bh:", self.bh)
+        print("W:", self.W)
+        print("V:", self.V)
+        print("bz:", self.bz)        
 
 def reverse(a):
     l = a.tolist()
