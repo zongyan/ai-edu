@@ -17,11 +17,11 @@ from MiniFramework.HyperParameters_4_3 import *
 from MiniFramework.WeightsBias_2_1 import *
 from ExtendedDataReader.NameDataReader import *
 
-file = "../../data/ch19.name_language.txt"
+file = "../../SourceCode/data/ch19.name_language.txt"
 
 def load_data():
     dr = NameDataReader()
-    dr.ReadData(file)
+    dr.ReadData(file) # 这个函数里面，就是有把从text文档到最后训练数据的整个过程
     dr.GenerateValidationSet(1000)
     return dr
 
@@ -95,10 +95,18 @@ class net(object):
         self.loss_fun = LossFunction_1_1(self.hp.net_type)
         self.loss_trace = TrainingHistory_3_0()
         self.ts_list = []
-        for i in range(self.hp.num_step+1):
+        for i in range(self.hp.num_step+1): # 这里是一下子就定义了21个时间步
             ts = timestep()
             self.ts_list.append(ts)
         #end for
+        
+        """
+        如line 97-101所示，在定义网络的时候，就是会定义一个网络，能够包括所有时间步
+        的可能性。然后就是在进行前向传播&反向传播的时候，就是会根据根据一个每一个
+        样本的时间步的不同，然后就是会有一些不同的了，如line 120的forward函数和134的
+        backward函数所示 -- 用isFirst & isLast来进行判断是不是第一个时间步，是不是
+        最后一个时间步
+        """
 
     def __create_subfolder(self):
         if self.model_name != None:
@@ -193,8 +201,13 @@ class net(object):
             dataReader.Shuffle()
             while(True):
                 # get data
-                batch_x, batch_y = dataReader.GetBatchTrainSamples(self.hp.batch_size)
-                if (batch_x is None):
+                batch_x, batch_y = dataReader.GetBatchTrainSamples(self.hp.batch_size) # 这里获取batch数据的方式，也是有一些的不一样的，逻辑也很简单
+                if (batch_x is None): # 这个是这一种不定长时序rnn所特有的一部分内容, cnn, 
+                                      # ffnn, 以及定时间步的rnn，都是用另外一种iteration
+                                      # 形式的，但是对于这一种不定时间步的rnn，就是不需要
+                                      # iteration, 直接用这种形式代替，即的如果batch没有
+                                      # 了，就是跳出这一个epoch可以的了。 也是因为这一种rnn
+                                      # 的网络结构，就是和数据有很大的关系
                     break
                 # forward
                 self.forward(batch_x)
@@ -209,7 +222,7 @@ class net(object):
             loss,acc = self.check_loss(X,Y)
             self.loss_trace.Add(epoch, total_iter, None, None, loss, acc, None)
             print(str.format("{0}:{1}:{2} loss={3:6f}, acc={4:6f}", epoch, total_iter, self.hp.eta, loss, acc))
-            if (loss < min_loss):
+            if (loss < min_loss): # 这里就是给出了获取更小loss的方式了
                 min_loss = loss
                 self.save_parameters()
             #endif
@@ -222,7 +235,7 @@ class net(object):
         for i in range(dataReader.num_train):
             x,y = dataReader.GetBatchTrainSamples(1)
             output = self.forward(x)
-            pred = np.argmax(output)
+            pred = np.argmax(output) # 获取最大值的index
             label = np.argmax(y)
             confusion_matrix[label, pred] += 1
             if (pred == label):
@@ -233,12 +246,13 @@ class net(object):
 
     def draw_confusion_matrix(self, dataReader, confusion_matrix):
         for i in range(dataReader.num_category):
-            confusion_matrix[i] = confusion_matrix[i] / confusion_matrix[i].sum()
-
+            confusion_matrix[i] = confusion_matrix[i] / confusion_matrix[i].sum() 
+        # confusion_matrix[i]返回的是每一行的数值，然后也就是每一个元素相对于每一行元素综合的比值了。
+        
         # Set up plot
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        cax = ax.matshow(confusion_matrix)
+        cax = ax.matshow(confusion_matrix) # Display an array as a matrix in a new figure window.
         fig.colorbar(cax)
 
         # Set up axes
@@ -256,9 +270,9 @@ class net(object):
 if __name__=='__main__':
     dataReader = load_data()
     eta = 0.02 # 0.02
-    max_epoch = 100 # 100
+    max_epoch = 20 # 100
     batch_size = 8 # 8
-    num_input = dataReader.num_feature
+    num_input = dataReader.num_feature #表面上是有26个feature（字母），其实因为每一个名字不可能包含所有的字母，所以就是不可能是26个features
     num_hidden = 16 # 16
     num_output = dataReader.num_category
     model = str.format("Level5_{0}_{1}_{2}_{3}_{4}_{5}", max_epoch, batch_size, num_input, num_hidden, num_output, eta)

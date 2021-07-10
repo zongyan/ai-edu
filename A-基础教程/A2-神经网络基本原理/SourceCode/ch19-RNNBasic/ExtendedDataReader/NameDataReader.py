@@ -10,7 +10,7 @@ from MiniFramework.EnumDef_6_0 import *
 
 all_letters = string.ascii_letters[0:26] + " ,'"
 num_letter = len(all_letters)
-max_letter = 20
+max_letter = 20 # 此处就是定义了max_letter, 就是名字中字母数量的最大值
 
 class NameData(object):
     def __init__(self, name, lang, lang_id):
@@ -46,17 +46,18 @@ class NameDataReader(DataReader_2_0):
         lines = file.readlines()
         self.num_train = len(lines)
         for line in lines:
-            tmp = line.split("\t")
-            name = tmp[0].strip()
+            tmp = line.split("\t") # 以\t分开数据
+            name = tmp[0].strip() # Remove spaces at the beginning and at the end of the string:
             language = tmp[1].strip()
             len_name = len(name)
             lang_id = self.getLanguageId(language)
             nd = NameData(name, language, lang_id)
-            self.name_data[len_name].append(nd)
+            self.name_data[len_name].append(nd) #以array的形式，但是里面数据类型是NameData类型
         #endfor
         file.close()
         self.num_category = len(self.language_list)
-
+        
+        # 这里使用list的形式，就是先把两个字母的所有名字，三个字母的所有名字，一直到20个字母所有名字（没有的话，就是直接是忽略的）
         self.X = []
         self.Y = []
         num_Y = 0
@@ -69,12 +70,20 @@ class NameDataReader(DataReader_2_0):
                 self.X.append(Xi)
                 self.Y.append(Yi)
                 for j in range(num_names):
-                    nd = self.name_data[i][j]
+                    nd = self.name_data[i][j] # 读取出相应list的名字（其实这个也是一个二维的list）
                     Xi[j], Yi[j] = nd.ToOneHot(self.num_category)
                 #end for
             #end if
-        #end for       
+        #end for      
 
+    """
+    先是执行try代码，如果try执行过程中存在exception，则执行except部分，然后就是进入
+    finally部分，如果try中不存在exception，则直接进入finally。
+    
+    这里需要注意的是，因为函数本身的逻辑，如果try运行通过了，就是说明list里面是有相关
+    的元素的了。如果try运行不通过，则是没有相关的元素，就是需要执行except，然后把元素
+    放入到list里面。
+    """    
     def getLanguageId(self, language):
         try:
             lang_id = self.language_list.index(language)
