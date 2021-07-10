@@ -29,7 +29,7 @@ class timestep(object):
     # for the first cell, prev_s should be zero
     def forward(self, x, U, V, W, prev_s, isFirst, isLast):
         self.U = U
-        self.V = V
+        self.V = V # 因为这个V的维度，我们才是剋有得到10个分类的
         self.W = W
         self.x = x
 
@@ -123,7 +123,7 @@ class net(object):
         self.ts = self.x.shape[1]
         for i in range(0, self.ts):
             if (i == 0):
-                self.ts_list[i].forward(X[:,i], self.U, self.V, self.W, None, True, False)
+                self.ts_list[i].forward(X[:,i], self.U, self.V, self.W, None, True, False) # X[:,i]=X[:,0,:] 读取第一维度所有的数，第二维度第i次的数据，第三维度所有的数据
             elif (i == self.ts - 1):
                 self.ts_list[i].forward(X[:,i], self.U, self.V, self.W, self.ts_list[i-1].s[0:self.batch], False, True)
             else:
