@@ -48,7 +48,7 @@ class DataReader_2_0(object):
             self.XTrainRaw = data["data"]
             self.YTrainRaw = data["label"]
             assert(self.XTrainRaw.shape[0] == self.YTrainRaw.shape[0])
-            self.num_train = self.XTrainRaw.shape[0]
+            self.num_train = self.XTrainRaw.shape[0] # 样本数
             self.num_feature = self.XTrainRaw.shape[1]
             self.num_category = len(npy.unique(self.YTrainRaw))
             # this is for if no normalize requirment
@@ -123,7 +123,7 @@ class DataReader_2_0(object):
         # min value
         self.Y_norm[0, 0] = min_value 
         # range value
-        self.Y_norm[1, 0] = max_value - min_value 
+        self.Y_norm[1, 0] = max_value - min_value # 这么做的目的就是为了后面DeNormalize的时候方便一些
         y_new = (raw_data - min_value) / self.Y_norm[1, 0]
         return y_new
 

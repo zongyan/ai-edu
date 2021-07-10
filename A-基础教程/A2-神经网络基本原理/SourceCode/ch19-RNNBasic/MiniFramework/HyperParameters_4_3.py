@@ -31,6 +31,7 @@ class HyperParameters_4_3(object):
     def toString(self):
         #title = str.format("bz:{0},eta:{1},init:{2},op:{3}", self.batch_size, self.eta, self.init_method.name, self.optimizer_name.name)
         title = str.format("epoch:{0},batch:{1},hidden:{2},eta:{3}", self.max_epoch, self.batch_size, self.num_hidden, self.eta)
+        # 这一种plot fiture title的方式，还是非常值得借鉴的了。
         return title
 
 class HyperParameters_4_4(object):

@@ -7,8 +7,8 @@ from MiniFramework.DataReader_2_0 import *
 from MiniFramework.EnumDef_6_0 import *
 import random
 
-train_file = '../../Data/ch19_pm25_train.npz'
-test_file = '../../Data/ch19_pm25_test.npz'
+train_file = '../../SourceCode/Data/ch19_pm25_train.npz'
+test_file = '../../SourceCode/Data/ch19_pm25_test.npz'
 
 """
 field: year, month, day, hour, dew, temp, air_press, wind_direction, wind_speed
@@ -61,11 +61,20 @@ class PM25DataReader(DataReader_2_0):
     def Normalize(self):
         super().NormalizeX()
         super().NormalizeY(self.mode)
-        self.num_train = self.num_train - self.timestep
+        self.num_train = self.num_train - self.timestep # 为什么这里就是需要有这么
+                                                        # 一个公式呢？ --- 因为rnn
+                                                        # 的维度就是和时间步有关系
+                                                        # 了，所以就是需要减去。比如,
+                                                        # 有10个样本，时间步是2，
+                                                        # 10-2=8 (index from 0),
+                                                        # 所以其实后来进行维度改变之后，
+                                                        # 就是变成了9个样本数了。
         self.XTrain, self.YTrain = self.GenerateTimestepData(self.XTrain, self.YTrain, self.num_train)
         self.num_test = self.num_test - self.timestep
         self.XTest, self.YTest = self.GenerateTimestepData(self.XTest, self.YTest, self.num_test)
 
+    # 本来train set是二维，而使用在rnn中的data set是三维的，所以这里就是需要从二维变
+    # 成三维，同时引入时间步这个维度的数据。
     def GenerateTimestepData(self, x, y, count):
         tmp_x = np.zeros((count, self.timestep, self.num_feature))
         tmp_y = np.zeros((count, self.num_category))
@@ -85,3 +94,8 @@ class PM25DataReader(DataReader_2_0):
         for i in range(k):
             self.XDev[i] = self.XTrain[a[i]]
             self.YDev[i] = self.YTrain[a[i]]
+            
+    def DeNormalise(self, predict_data):
+        tmp_real_value = super().DeNormalizeY(predict_data)
+        
+        return tmp_real_value
