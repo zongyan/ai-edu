@@ -4,10 +4,10 @@
 import struct
 from MiniFramework.DataReader_2_0 import *
 
-train_image_file = '../../Data/train-images-10'
-train_label_file = '../../Data/train-labels-10'
-test_image_file = '../../Data/test-images-10'
-test_label_file = '../../Data/test-labels-10'
+train_image_file = '../../SourceCode/Data/train-images-10'
+train_label_file = '../../SourceCode/Data/train-labels-10'
+test_image_file = '../../SourceCode/Data/test-images-10'
+test_label_file = '../../SourceCode/Data/test-labels-10'
 
 class MnistImageDataReader(DataReader_2_0):
     # mode: "image"=Nx1x28x28,  "vector"=Nx1x784,  "timestep"=Nx28x28
@@ -46,7 +46,7 @@ class MnistImageDataReader(DataReader_2_0):
         self.num_validation = 0
 
     def ReadData(self):
-        self.XTrainRaw = self.ReadImageFile(self.train_image_file)
+        self.XTrainRaw = self.ReadImageFile(self.train_image_file) # (60000, 1, 28, 28)
         self.YTrainRaw = self.ReadLabelFile(self.train_label_file)
         self.XTestRaw = self.ReadImageFile(self.test_image_file)
         self.YTestRaw = self.ReadLabelFile(self.test_label_file)
@@ -112,7 +112,7 @@ class MnistImageDataReader(DataReader_2_0):
         x_max = np.max(XRawData)
         x_min = np.min(XRawData)
         X_NEW = (XRawData - x_min)/(x_max-x_min)
-        return X_NEW
+        return X_NEW # (60000, 1, 28, 28)
 
     def GetBatchTrainSamples(self, batch_size, iteration):
         start = iteration * batch_size
@@ -130,7 +130,7 @@ class MnistImageDataReader(DataReader_2_0):
         elif (self.mode == "image"):
             return batch_X, batch_Y
         elif (self.mode == "timestep"):
-            return batch_X.reshape(-1,28,28), batch_Y
+            return batch_X.reshape(-1,28,28), batch_Y # 这里做了维度的调整，从原来的128*1*28*28变成了128*28*28
 
     def GetValidationSet(self):
         batch_X = self.XDev

@@ -7,7 +7,7 @@ from Level3_Base import *
 from ExtendedDataReader.MnistImageDataReader import *
 
 def load_data():
-    dataReader = MnistImageDataReader(mode="timestep")
+    dataReader = MnistImageDataReader(mode="timestep") # 注意了，这里的模式和前面dnn(vector)，rnn(image)中是不一样的
     #dataReader.ReadLessData(10000)
     dataReader.ReadData()
     dataReader.NormalizeX()

@@ -179,7 +179,7 @@ class net(object):
                 isFirst = False
                 prev_s2 = self.ts_list[i-1].s2
             #endif
-            self.ts_list[i].forward_2(X[:,self.ts-i-1], self.U2, self.bU2, self.W2, prev_s2, isFirst)
+            self.ts_list[i].forward_2(X[:,self.ts-i-1], self.U2, self.bU2, self.W2, prev_s2, isFirst) # 输入的数据调换了顺序，两个forward的代码除了U, V, W不同，计算方式都是一样的
         #end for
         # sum
         for i in range(0, self.ts):
