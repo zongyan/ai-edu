@@ -274,7 +274,7 @@ class net(object):
                     print(str.format("{0}:{1}:{2:3f} loss={3:6f}, acc={4:6f}", epoch, total_iteration, self.hp.eta, loss_vld, acc_vld))
                     if (loss_vld < min_loss):
                         min_loss = loss_vld
-                        self.save_parameters(ParameterType.Best)
+                        self.save_parameters(ParameterType.Best) # 这一部分的代码，就是比较最小的loss数值，然后保存下来，这个和早停法还是有区别的
             #endif
         #end for
         self.save_parameters(ParameterType.Last)
@@ -295,6 +295,7 @@ class net(object):
         print(str.format("loss={0:6f}, acc={1:6f}", loss, acc)) 
 
 def test(net, dataReader, num_step, pred_step, start, end):
+    fig = plt.figure(figsize=(6,6)) # fixed the plotting bug
     X,Y = dataReader.GetTestSet()
     assert(X.shape[0] == Y.shape[0])
     count = X.shape[0] - X.shape[0] % pred_step
@@ -303,7 +304,7 @@ def test(net, dataReader, num_step, pred_step, start, end):
     for i in range(0, count, pred_step):
         A[i:i+pred_step] = predict(net, X[i:i+pred_step], num_step, pred_step)
 
-    loss,acc = net.loss_fun.CheckLoss(A, Y[0:count])
+    loss,acc = net.loss_fun.CheckLoss(A, Y[0:count]) # 并不是和所有的Y值比，而是跟Y[0:count]比较，还是有区别的
     print(str.format("pred_step={0}, loss={1:6f}, acc={2:6f}", pred_step, loss, acc))
 
     plt.plot(A[start+1:end+1], 'r-x', label="Pred")
@@ -313,7 +314,7 @@ def test(net, dataReader, num_step, pred_step, start, end):
 
 def predict(net, X, num_step, pred_step):
     A = np.zeros((pred_step, 1))
-    for i in range(pred_step):
+    for i in range(pred_step): # pred_step代表的是预测未来的小时数
         x = set_predicated_value(X[i:i+1], A, num_step, i)
         a = net.forward(x)
         A[i,0] = a
@@ -348,14 +349,24 @@ if __name__=='__main__':
         net_type)
 
     n = net(hp, model)
-    n.train(dataReader, checkpoint=1)
+    # n.train(dataReader, checkpoint=1)
 
-    n.load_parameters(ParameterType.Last)
-    pred_steps = [8,4,2,1]
-    for i in range(4):
-        test(n, dataReader, num_step, pred_steps[i], 1050, 1150)
+    """
+    其实，以后还是需要借鉴这个思路的了，就是需要对比loss的最小值，并把相应的得到的模型
+    parameters都是保存下来的了，这样子就可以直接是load这个参数就是可以的了，避免了很多
+    不必要的烦恼
+    """
+    # n.load_parameters(ParameterType.Last)
+    # pred_steps = [8,4,2,1]
+    # for i in range(4):
+    #     test(n, dataReader, num_step, pred_steps[i], 1050, 1150)
 
     n.load_parameters(ParameterType.Best)
-    pred_steps = [8,4,2,1]
-    for i in range(4):
-        test(n, dataReader, num_step, pred_steps[i], 1050, 1150)
+    # pred_steps = [8,4,2,1]
+    # for i in range(4):
+    #     test(n, dataReader, num_step, pred_steps[i], 1050, 1150)
+    
+    test(n, dataReader, num_step, 8, 1050, 1150) #预测未来8小时      
+    test(n, dataReader, num_step, 4, 1050, 1150) #预测未来4小时        
+    test(n, dataReader, num_step, 2, 1050, 1150) #预测未来2小时                
+    test(n, dataReader, num_step, 1, 1050, 1150) #预测未来1小时                    
