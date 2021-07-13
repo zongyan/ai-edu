@@ -13,8 +13,8 @@ from MiniFramework.LossFunction_1_1 import *
 from MiniFramework.TrainingHistory_3_0 import *
 from MiniFramework.LSTMCell_1_2 import *
 
-train_file = "../../data/ch19.train_minus.npz"
-test_file = "../../data/ch19.test_minus.npz"
+train_file = "../../SourceCode/data/ch19.train_minus.npz"
+test_file = "../../SourceCode/data/ch19.test_minus.npz"
 
 def load_data():
     dr = DataReader_2_0(train_file, test_file)
@@ -28,14 +28,14 @@ class net(object):
         self.dr = dr
         self.loss_fun = LossFunction_1_1(NetType.BinaryClassifier)
         self.loss_trace = TrainingHistory_3_0()
-        self.times = 4
+        self.times = 4 # 总共有4个时间步，会使用在train过程中
         self.input_size = input_size
         self.hidden_size = hidden_size
         self.output_size = output_size
         self.bias = bias
         self.lstmcell = []
         self.linearcell = []
-        for i in range(self.times):
+        for i in range(self.times): # 正如文本中所提到的，每一个隐藏层都是接一个输出层
             self.lstmcell.append(LSTMCell_1_2(input_size, hidden_size, bias=bias))
             self.linearcell.append(LinearCell_1_2(hidden_size, output_size, Logistic(), bias=bias))
 
@@ -94,20 +94,35 @@ class net(object):
         std = 1.0 / math.sqrt(self.hidden_size)
         p = np.random.uniform(-std, std, shape)
         return p
+    
+    def init_params_MSRA(self, shape):        
+        p = np.random.normal(0, np.sqrt(2/shape[1]), size=(shape[0], shape[1])).astype('float32')        
+        return p
 
-
+    def init_params_Xavier(self, shape):        
+        t = math.sqrt(6/(shape[1]+shape[0]))
+        p = np.random.uniform(-t, t, (shape[0], shape[1])).astype('float32')    
+        return p
+    
     def train(self, batch_size, checkpoint=0.1):
         self.batch_size = batch_size
         max_epoch = 100
         eta = 0.1
         # Try different initialize method
-        #self.U = np.random.random((4 * self.input_size, self.hidden_size))
-        #self.W = np.random.random((4 * self.hidden_size, self.hidden_size))
+        # self.U = np.random.random((4 * self.input_size, self.hidden_size))
+        # self.W = np.random.random((4 * self.hidden_size, self.hidden_size))
+        # self.V = np.random.random((self.hidden_size, self.output_size))
         self.U = self.init_params_uniform((4 * self.input_size, self.hidden_size))
         self.W = self.init_params_uniform((4 * self.hidden_size, self.hidden_size))
-        self.V = np.random.random((self.hidden_size, self.output_size))
+        self.V = self.init_params_uniform((self.hidden_size, self.output_size))
+        # self.U = self.init_params_MSRA((4 * self.input_size, self.hidden_size))
+        # self.W = self.init_params_MSRA((4 * self.hidden_size, self.hidden_size))
+        # self.V = self.init_params_MSRA((self.hidden_size, self.output_size))  
+        # self.U = self.init_params_Xavier((4 * self.input_size, self.hidden_size))
+        # self.W = self.init_params_Xavier((4 * self.hidden_size, self.hidden_size))
+        # self.V = self.init_params_Xavier((self.hidden_size, self.output_size))          
         self.bh = np.zeros((4, self.hidden_size))
-        self.b = np.zeros((self.output_size))
+        self.b = np.zeros((self.output_size)) # 类似于经典rnn中的bv
 
         max_iteration = math.ceil(self.dr.num_train/batch_size)
         checkpoint_iteration = (int)(math.ceil(max_iteration * checkpoint))
@@ -121,7 +136,7 @@ class net(object):
                 self.forward(batch_x)
                 self.backward(batch_y)
                 # update
-                for i in range(self.times):
+                for i in range(self.times): # times是意思就是总共有4个时间步
                     # self.lstmcell[i].merge_params()
                     self.U = self.U - self.lstmcell[i].dU * eta /self.batch_size
                     self.W = self.W - self.lstmcell[i].dW * eta /self.batch_size
@@ -129,6 +144,8 @@ class net(object):
                     if self.bias:
                         self.bh = self.bh - self.lstmcell[i].db * eta /self.batch_size
                         self.b = self.b - self.linearcell[i].db * eta /self.batch_size
+                        # self.bh = self.bh - 0
+                        # self.b = self.b - 0 
                 # check loss
                 total_iteration = epoch * max_iteration + iteration
                 if (total_iteration+1) % checkpoint_iteration == 0:
@@ -174,9 +191,9 @@ def reverse(a):
 if __name__=='__main__':
     dr = load_data()
     count = dr.num_train
-    input_size = 2
-    hidden_size = 4
-    output_size = 1
+    input_size = 2 # 输入层神经元个数
+    hidden_size = 4 # 隐藏层神经元个数
+    output_size = 1 # 输出层神经元个数
     n = net(dr, input_size, hidden_size, output_size, bias=True)
-    n.train(batch_size=1, checkpoint=0.1)
+    n.train(batch_size=2, checkpoint=0.1)
     n.test()
