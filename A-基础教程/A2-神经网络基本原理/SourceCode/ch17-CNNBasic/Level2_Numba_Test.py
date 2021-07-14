@@ -2,7 +2,7 @@
 # Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import numpy
-import numba
+import numba as nb
 import time
 
 from tqdm import tqdm
@@ -34,7 +34,7 @@ def conv_4d(x, weights, bias, out_h, out_w, stride=1):
                                 rs[bs,oc,i,j] += x[bs,ic,fh+ii,fw+jj] * weights[oc,ic,fh,fw]
     return rs
 
-@nb.jit(nopython=True) # 就是这一行代码，使下面这个函数，编译成静态
+@nb.jit(nopython=True) # 就是这一行代码，使下面这个函数，编译成静态，
 def jit_conv_4d(x, weights, bias, out_h, out_w, stride=1):
     # 输入图片的批大小，通道数，高，宽
     assert(x.ndim == 4)
