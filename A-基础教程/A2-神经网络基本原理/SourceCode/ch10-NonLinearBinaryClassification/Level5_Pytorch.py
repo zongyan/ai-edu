@@ -109,7 +109,7 @@ if __name__ == '__main__':
         ev_loss.append(bv_loss) # 使用validation set计算出loss进行评判training性能
         print("Epoch: [%d / %d], Training Loss: %.6f, Val Loss: %.6f" % (epoch, max_epoch, np.mean(bt_loss), bv_loss))
 
-
+    fig = plt.figure(figsize=(6.5,6.5)) # width=6.5inches, height=6.5inches
     plt.plot([i for i in range(max_epoch)], et_loss)        # training loss
     plt.plot([i for i in range(max_epoch)], ev_loss)        # validate loss
     plt.title("Loss")

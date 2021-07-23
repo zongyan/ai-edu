@@ -80,6 +80,8 @@ if __name__ == '__main__':
         e_loss.append(np.mean(b_loss))
         if epoch % 20 == 0:
             print("Epoch: %d, Loss: %.5f" % (epoch, np.mean(b_loss)))
+    
+    fig = plt.figure(figsize=(6.5,6.5)) # width=6.5inches, height=6.5inches        
     plt.plot([i for i in range(max_epoch)], e_loss)
     plt.xlabel('Epoch')
     plt.ylabel('Mean loss')

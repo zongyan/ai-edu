@@ -73,8 +73,8 @@ if __name__=='__main__':
         output_type, net_type)
     n = net(hp, model)
 
-    n.train(dataReader, checkpoint=1)
-    n.loss_trace.ShowLossHistory(hp.toString(), XCoordinate.Iteration)
+    # n.train(dataReader, checkpoint=1)
+    # n.loss_trace.ShowLossHistory(hp.toString(), XCoordinate.Iteration)
     # the following is to use the last trained model for testing
     #n.load_parameters(ParameterType.Last)
     # pred_steps = [8,4,2,1]
